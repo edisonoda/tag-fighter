@@ -1,0 +1,118 @@
+:root {
+  --background-color-1: #dddddd;
+  --background-color-2: #cccccc;
+  --accent-color: #1F1F1F;
+  --off-color: #3F3F3F;
+  --primary-color: #005C69;
+  --secondary-color: #7F557D;
+
+  --pad: 1em;
+  --radius: 1em;
+}
+
+:root .dark-mode {
+  --background-color-1: #18191c;
+  --background-color-2: #1f2024;
+  --accent-color: #dddddd;
+  --off-color: #9f9f9f;
+}
+
+.off-color {
+  color: var(--off-color);
+}
+
+.primary-color {
+  color: var(--primary-color);
+}
+
+.secondary-color {
+  color: var(--secondary-color);
+}
+
+body {
+  font-family: 'Courier New', Courier, monospace;
+  margin: 0;
+  padding: 0;
+
+  background-color: var(--background-color-1);
+  color: var(--accent-color);
+}
+
+button {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+dialog.main-menu {
+  background-color: var(--background-color-2);
+  color: var(--accent-color);
+  border-radius: var(--radius);
+  text-align: center;
+
+  box-sizing: border-box;
+  padding: 2em;
+  margin: 0;
+  width: 300px;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  z-index: 100;
+}
+
+dialog.main-menu header h1 {
+  margin: 0;
+}
+
+dialog.main-menu header p {
+  margin: 0;
+  margin-bottom: .5em;
+}
+
+dialog.main-menu nav {
+  margin: 0 auto;
+
+  max-width: 80%;
+  width: 300px;
+}
+
+dialog.main-menu nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+dialog.main-menu nav ul button {
+  background-color: transparent;
+  color: var(--accent-color);
+
+  border: none;
+  border-radius: .5em;
+
+  font-size: 1.5em;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+  padding: .25em var(--pad);
+  width: 100%;
+}
+
+dialog.main-menu nav ul button::before,
+dialog.main-menu nav ul button::after {
+  font-family: 'Material Symbols Outlined';
+  content: '\e5cc';
+}
+
+dialog.main-menu nav ul button::after {
+  visibility: hidden;
+}
+
+dialog.main-menu nav ul button:hover,
+dialog.main-menu nav ul button:focus {
+  background-color: var(--primary-color);
+  cursor: pointer;
+}
