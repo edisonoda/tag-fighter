@@ -5,6 +5,7 @@ const DEFAULT_DOWN = 'KeyS';
 const DEFAULT_LEFT = 'KeyA';
 const DEFAULT_RIGHT = 'KeyD';
 const DEFAULT_ANGLE = 0 * (Math.PI / 180);
+const DEFAULT_CROSSHAIR = 'shot.svg';
 
 export class Player extends Entity {
     constructor() {
@@ -28,7 +29,9 @@ export class Player extends Entity {
 
     connectedCallback() {
         super.connectedCallback();
+
         this.setupControls();
+        this.changeCrosshair(DEFAULT_CROSSHAIR);
         this.id = 'player';
     }
 
@@ -88,6 +91,10 @@ export class Player extends Entity {
         document.addEventListener('keyup', ev => {
             this.pressedKeys[ev.code] = false;
         });
+    }
+
+    changeCrosshair(sprite) {
+        document.body.style.setProperty('--crosshair', `url('assets/img/crosshairs/${sprite}')`);
     }
 }
 
