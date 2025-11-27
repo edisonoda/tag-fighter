@@ -1,5 +1,5 @@
 export class Entity extends HTMLElement {
-    constructor(sprite, x, y, acc, friction, maxSpeed) {
+    constructor(sprite, acc, friction, maxSpeed, x = 0, y = 0) {
         super();
         this.sprite = sprite;
         this.x = x;

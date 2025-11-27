@@ -1,19 +1,15 @@
 import { Character } from './character.js';
+import { Gun } from '../guns/gun.js';
 
 const DEFAULT_UP = 'KeyW';
 const DEFAULT_DOWN = 'KeyS';
 const DEFAULT_LEFT = 'KeyA';
 const DEFAULT_RIGHT = 'KeyD';
 const DEFAULT_ANGLE = 0 * (Math.PI / 180);
-const DEFAULT_CROSSHAIR = 'shot.svg';
 
 export class Player extends Character {
     constructor() {
-        super(
-            'assets/img/player/default.svg',
-            document.body.clientWidth / 2,
-            document.body.clientHeight / 2
-        );
+        super('assets/img/player/default.svg');
 
         this.mouseX = 0;
         this.mouseY = 0;
@@ -25,19 +21,34 @@ export class Player extends Character {
 
         this.angleOffset = DEFAULT_ANGLE;
         this.pressedKeys = {};
+        this.pressedMouse = {};
+
+        this.shootOffset = 15;
+        this.primaryGun = null;
+
+        // Modifiers
+        this.damage
+        this.fireRate
+        this.reloadSpeed
+        this.projFriction
+        this.projForce
+        this.projTime
     }
 
     connectedCallback() {
         super.connectedCallback();
 
+        this.changePrimary(Gun);
         this.setupControls();
-        this.changeCrosshair(DEFAULT_CROSSHAIR);
         this.id = 'player';
     }
 
     update(dt) {
         super.update(dt);
         this.rotate();
+
+        if (this.pressedMouse['0'])
+            this.primary();
     }
 
     rotate() {
@@ -66,13 +77,26 @@ export class Player extends Character {
     }
 
     collide(entity) { }
-    primary() { }
+
+    primary() {
+        let dx = this.mouseX - this.x;
+        let dy = this.mouseY - this.y;
+
+        let direction = this.angleOffset + Math.atan2(dy, dx);
+        this.primaryGun.shoot(direction, 20);
+    }
+
     secondary() { }
     reload() { }
     dash() { }
     leftUtil() { }
     rightUtil() { }
     special() { }
+
+    changePrimary(gun) {
+        this.primaryGun = new gun(this);
+        this.changeCrosshair(gun.crosshair);
+    }
 
     setupControls() {
         document.addEventListener('mousemove', ev => {
@@ -86,6 +110,14 @@ export class Player extends Character {
 
         document.addEventListener('keyup', ev => {
             this.pressedKeys[ev.code] = false;
+        });
+
+        document.addEventListener('mousedown', ev => {
+            this.pressedMouse[ev.button.toString()] = true;
+        });
+
+        document.addEventListener('mouseup', ev => {
+            this.pressedMouse[ev.button.toString()] = false;
         });
     }
 

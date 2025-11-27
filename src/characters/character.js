@@ -5,8 +5,15 @@ export const DEFAULT_FRICTION = 5;
 export const DEFAULT_SPEED = 250;
 
 export class Character extends Entity {
-    constructor(sprite, x, y, acc = DEFAULT_ACC, friction = DEFAULT_FRICTION, maxSpeed = DEFAULT_SPEED) {
-        super(sprite, x, y, acc, friction, maxSpeed);
+    constructor(
+        sprite,
+        acc = DEFAULT_ACC,
+        friction = DEFAULT_FRICTION,
+        maxSpeed = DEFAULT_SPEED,
+        x = document.body.clientWidth / 2,
+        y = document.body.clientHeight / 2
+    ) {
+        super(sprite, acc, friction, maxSpeed, x, y);
         this.angle = 0;
     }
 

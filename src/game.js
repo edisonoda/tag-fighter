@@ -3,13 +3,27 @@ import { Player } from "./characters/player.js";
 export class Game {
     static main = document.getElementById('main');
     static paused = false;
+    static entities = [];
+
+    static addEntity(entity) {
+        if (entity)
+            this.entities.push(entity);
+    }
+
+    static removeEntity(entity) {
+        if (!entity) return;
+
+        let index = this.entities.findIndex(e => e === entity);
+        if (index !== -1) {
+            this.main.removeChild(entity);
+            this.entities.splice(index, 1);
+        }
+    }
 
     constructor() {
-        this.entities = [];
-
         this.player = document.createElement('app-player');
-        this.entities.push(this.player);
-        main.append(this.player);
+        Game.entities.push(this.player);
+        Game.main.append(this.player);
 
         this.lastTime = performance.now();
         requestAnimationFrame(t => this.loop(t));
@@ -26,9 +40,11 @@ export class Game {
     }
 
     update(dt) {
-        this.entities.forEach(e => e.update(dt));
+        Game.entities.forEach(e => e.update(dt));
     }
 }
 
-var game;
-if (!game) game = new Game();
+let game = null;
+document.addEventListener("DOMContentLoaded", (ev) => {
+    game = new Game();
+});
