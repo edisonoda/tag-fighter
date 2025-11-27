@@ -1,30 +1,26 @@
 export const DEFAULT_SIZE = 30; // In pixels
 export const DEFAULT_HITBOX = .8;
 
-export const DEFAULT_ACC = 30;
-export const DEFAULT_FRICTION = 5;
-export const DEFAULT_SPEED = 250;
+export const DEFAULT_ACC = 10;
+export const DEFAULT_FRICTION = 3;
+export const DEFAULT_SPEED = 5;
 
 export class Entity extends HTMLElement {
     static group = 'Entity';
 
-    constructor(
-        sprite,
-        size = DEFAULT_SIZE,
-        hitbox = DEFAULT_HITBOX,
-        acc = DEFAULT_ACC,
-        friction = DEFAULT_FRICTION,
-        maxSpeed = DEFAULT_SPEED,
-        x = 0,
-        y = 0
-    ) {
+    constructor() {
         super();
+        this.x = 0;
+        this.y = 0;
+    }
+
+    setupSprite(sprite, size = DEFAULT_SIZE, hitbox = DEFAULT_HITBOX) {
         this.sprite = sprite;
         this.size = size;
         this.hitbox = hitbox;
-        this.x = x;
-        this.y = y;
+    }
 
+    setupMovement(acc = DEFAULT_ACC, friction = DEFAULT_FRICTION, maxSpeed = DEFAULT_SPEED) {
         this.acc = acc;
         this.friction = friction;
         this.maxSpeed = maxSpeed;

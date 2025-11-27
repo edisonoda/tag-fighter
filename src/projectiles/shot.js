@@ -5,7 +5,9 @@ export class Shot extends Projectile {
     static tag = 'app-shot';
 
     constructor() {
-        super('assets/img/projectiles/shot.svg', 30, .2);
+        super();
+        this.setupSprite('assets/img/projectiles/shot.svg', 30, .2);
+        this.setupMovement();
     }
     
     connectedCallback() {

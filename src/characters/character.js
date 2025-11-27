@@ -1,26 +1,39 @@
-import { Entity, DEFAULT_SIZE, DEFAULT_HITBOX, DEFAULT_ACC, DEFAULT_FRICTION, DEFAULT_SPEED } from "../entity.js";
+import { Entity } from "../entity.js";
+
+export const DEFAULT_DAMAGED = 1;
 
 export class Character extends Entity {
-    constructor(
-        sprite,
-        size = DEFAULT_SIZE,
-        hitbox = DEFAULT_HITBOX,
-        acc = DEFAULT_ACC,
-        friction = DEFAULT_FRICTION,
-        maxSpeed = DEFAULT_SPEED,
-        x = document.body.clientWidth / 2,
-        y = document.body.clientHeight / 2
-    ) {
-        super(sprite, size, hitbox, acc, friction, maxSpeed, x, y);
+    static tag = '';
+
+    constructor() {
+        super();
         this.angle = 0;
+
+        this.damaged = false;
+        this.stunned = false;
+        this.slowed = false;
+
+        this.angleOffset = 0;
+        this.damagedDuration = DEFAULT_DAMAGED;
     }
 
-    connectedCallback() {
-        super.connectedCallback();
+    setupPosition(x, y) {
+        this.x = x;
+        this.y = y;
     }
+
+    // connectedCallback() {
+    //     super.connectedCallback();
+    // }
 
     update(dt) {
         super.update(dt);
+        this.rotate();
+    }
+
+    rotate() {
+        this.angle = this.angleOffset + Math.atan2(this.speed.y, this.speed.x) + Math.PI / 2;
+        this.refreshPosition();
     }
 
     refreshPosition() {
@@ -28,12 +41,13 @@ export class Character extends Entity {
         this.style.transform = `rotate(${this.angle}rad)`;
     }
     
-    collide(entity) { }
-    primary() { }
-    secondary() { }
-    reload() { }
-    dash() { }
-    leftUtil() { }
-    rightUtil() { }
-    special() { }
+    // move(dt) { }
+    // collide(entity) { }
+    // primary() { }
+    // secondary() { }
+    // reload() { }
+    // dash() { }
+    // leftUtil() { }
+    // rightUtil() { }
+    // special() { }
 }

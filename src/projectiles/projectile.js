@@ -13,20 +13,33 @@ export class Projectile extends Entity {
     static group = 'Projectile';
     static tag = '';
 
-    constructor(
-        sprite,
-        size = DEFAULT_SIZE,
-        hitbox = DEFAULT_HITBOX,
-        acc = DEFAULT_ACC,
-        friction = DEFAULT_FRICTION,
-        maxSpeed = DEFAULT_SPEED,
-        time = DEFAULT_TIME
-    ) {
-        super(sprite, size, hitbox, acc, friction, maxSpeed);
+    constructor(time = DEFAULT_TIME) {
+        super();
 
         this.shooter = null;
-        this.direction = 0;
         this.time = time;
+    }
+    
+    setupSprite(sprite, size = DEFAULT_SIZE, hitbox = DEFAULT_HITBOX) {
+        this.sprite = sprite;
+        this.size = size;
+        this.hitbox = hitbox;
+    }
+
+    setupMovement(acc = DEFAULT_ACC, friction = DEFAULT_FRICTION, maxSpeed = DEFAULT_SPEED) {
+        this.acc = acc;
+        this.friction = friction;
+        this.maxSpeed = maxSpeed;
+        this.speed = { x: 0, y: 0 };
+    }
+
+    setupProjectile(shooter, speed, x, y) {
+        this.shooter = shooter;
+
+        this.speed.x = speed.x;
+        this.speed.y = speed.y;
+        this.x = x;
+        this.y = y;
     }
 
     connectedCallback() {

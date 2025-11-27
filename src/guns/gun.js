@@ -70,14 +70,13 @@ export class Gun {
         let dx = Math.cos(direction);
         let dy = Math.sin(direction);
 
-        proj.direction = direction;
-        proj.force = force;
+        proj.setupProjectile(
+            this.owner,
+            { x: dx * force, y: dy * force },
+            this.owner.x + dx * this.owner.shootOffset,
+            this.owner.y + dy * this.owner.shootOffset
+        );
 
-        proj.speed.x = dx * force;
-        proj.speed.y = dy * force;
-        proj.x = this.owner.x + dx * this.owner.shootOffset;
-        proj.y = this.owner.y + dy * this.owner.shootOffset;
-        
         Game.addEntity(proj);
         Game.main.append(proj);
     }

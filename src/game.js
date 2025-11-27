@@ -1,7 +1,10 @@
 import { Player } from "./characters/player.js";
+// Temporary
+import { Hand } from "./characters/hand.js";
 
 export class Game {
     static main = document.getElementById('main');
+    static player = document.createElement('app-player');
     static paused = false;
     static entities = [];
 
@@ -21,9 +24,17 @@ export class Game {
     }
 
     constructor() {
-        this.player = document.createElement('app-player');
-        Game.entities.push(this.player);
-        Game.main.append(this.player);
+        Game.entities.push(Game.player);
+        Game.main.append(Game.player);
+
+        // Temporary
+        const hand = document.createElement('app-hand');
+        Game.entities.push(hand);
+        Game.main.append(hand);
+
+        // for (let i = 0; i < 10; i++) {
+
+        // }
 
         this.lastTime = performance.now();
         requestAnimationFrame(t => this.loop(t));

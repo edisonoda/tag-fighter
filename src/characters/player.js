@@ -7,11 +7,25 @@ const DEFAULT_LEFT = 'KeyA';
 const DEFAULT_RIGHT = 'KeyD';
 const DEFAULT_ANGLE = 0 * (Math.PI / 180);
 
+const DEFAULT_SIZE = 30; // In pixels
+const DEFAULT_HITBOX = .5;
+
+const DEFAULT_ACC = 30;
+const DEFAULT_FRICTION = 5;
+const DEFAULT_SPEED = 20;
+
+const DEFAULT_SHOOT_OFFSET = 15;
+
 export class Player extends Character {
     static group = 'Player';
+    static tag = 'app-player';
 
     constructor() {
-        super('assets/img/player/default.svg', 30, .5);
+        super();
+
+        this.setupSprite('assets/img/player/default.svg', DEFAULT_SIZE, DEFAULT_HITBOX);
+        this.setupMovement(DEFAULT_ACC, DEFAULT_FRICTION, DEFAULT_SPEED);
+        this.setupPosition(document.body.clientWidth / 2, document.body.clientHeight / 2);
 
         this.mouseX = 0;
         this.mouseY = 0;
@@ -25,7 +39,7 @@ export class Player extends Character {
         this.pressedKeys = {};
         this.pressedMouse = {};
 
-        this.shootOffset = 15;
+        this.shootOffset = DEFAULT_SHOOT_OFFSET;
         this.primaryGun = null;
 
         // Modifiers
@@ -128,4 +142,4 @@ export class Player extends Character {
     }
 }
 
-customElements.define('app-player', Player);
+customElements.define(Player.tag, Player);
