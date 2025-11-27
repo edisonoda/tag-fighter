@@ -5,42 +5,47 @@
   <title>Tag Fighter</title>
   <meta charset="UTF-8">
   <meta name="author" content="Edison Furusato">
+  <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body class="dark-mode">
-  <dialog class="main-menu" aria-modal="true" open="true">
+  <dialog id="main-menu" aria-modal="true">
     <header>
       <h1>TAG FIGHTER</h1>
       <p class="off-color">v0.1</p>
     </header>
 
-    <nav>
-      <ul>
-        <li>
-          <button>
-            <span>Start</span>
-          </button>
-        </li>
-        <li>
-          <button>
-            <span>Settings</span>
-          </button>
-        </li>
-        <li>
-          <button>
-            <span>Credits</span>
-          </button>
-        </li>
-      </ul>
-    </nav>
+    <form>
+      <nav>
+        <ul>
+          <li>
+            <button id="start" value="start" formmethod="dialog">
+              <span>Start</span>
+            </button>
+          </li>
+          <li>
+            <button id="settings" value="settings" formmethod="dialog">
+              <span>Settings</span>
+            </button>
+          </li>
+          <li>
+            <button id="credits" value="credits" formmethod="dialog">
+              <span>Credits</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </form>
   </dialog>
 
-  <main>
+  <main id="main">
 
   </main>
+
+  <script src="src/menu.js"></script>
 </body>
 
 </html>

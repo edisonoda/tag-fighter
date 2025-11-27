@@ -42,7 +42,12 @@ button {
   font-family: 'Courier New', Courier, monospace;
 }
 
-dialog.main-menu {
+@keyframes openmodal {
+  0% { scale: 0; opacity: 0; }
+  100% { scale: 1; opacity: 1; }
+}
+
+#main-menu {
   background-color: var(--background-color-2);
   color: var(--accent-color);
   border-radius: var(--radius);
@@ -56,34 +61,37 @@ dialog.main-menu {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-
+  translate: -50% -50%;
   z-index: 100;
 }
 
-dialog.main-menu header h1 {
+#main-menu:open {
+  animation: openmodal .1s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+#main-menu header h1 {
   margin: 0;
 }
 
-dialog.main-menu header p {
+#main-menu header p {
   margin: 0;
   margin-bottom: .5em;
 }
 
-dialog.main-menu nav {
+#main-menu nav {
   margin: 0 auto;
 
   max-width: 80%;
   width: 300px;
 }
 
-dialog.main-menu nav ul {
+#main-menu nav ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
 
-dialog.main-menu nav ul button {
+#main-menu nav ul button {
   background-color: transparent;
   color: var(--accent-color);
 
@@ -99,20 +107,22 @@ dialog.main-menu nav ul button {
   position: relative;
   padding: .25em var(--pad);
   width: 100%;
+
+  transition: all .5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
-dialog.main-menu nav ul button::before,
-dialog.main-menu nav ul button::after {
+#main-menu nav ul button::before,
+#main-menu nav ul button::after {
   font-family: 'Material Symbols Outlined';
   content: '\e5cc';
 }
 
-dialog.main-menu nav ul button::after {
+#main-menu nav ul button::after {
   visibility: hidden;
 }
 
-dialog.main-menu nav ul button:hover,
-dialog.main-menu nav ul button:focus {
+#main-menu nav ul button:hover {
   background-color: var(--primary-color);
   cursor: pointer;
+  transform: scale(1.1);
 }
