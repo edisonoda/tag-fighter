@@ -1,15 +1,22 @@
-class Entity extends HTMLElement {
+export class Entity extends HTMLElement {
     constructor(sprite, x, y) {
         super();
         this.sprite = sprite;
         this.x = x;
         this.y = y;
 
-        this.moveRate = 10;
+        this.moveRate = 250;
         this.angle = 0;
+    }
 
-        this.style.backgroundImage = `url('${sprite}')`;
+    connectedCallback() {
+        this.style.backgroundImage = `url('${this.sprite}')`;
+        this.classList.add('entity');
         this.refreshPosition();
+    }
+
+    update(dt) {
+        this.move(dt);
     }
 
     refreshPosition() {
@@ -18,7 +25,7 @@ class Entity extends HTMLElement {
         this.style.transform = `rotate(${this.angle}rad)`;
     }
 
-    move() { }
+    move(dt) { }
     primary() { }
     secondary() { }
     reload() { }

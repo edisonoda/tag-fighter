@@ -1,16 +1,21 @@
+import { Entity } from './entity.js';
+
 const DEFAULT_UP = 'KeyW';
 const DEFAULT_DOWN = 'KeyS';
 const DEFAULT_LEFT = 'KeyA';
 const DEFAULT_RIGHT = 'KeyD';
-const DEFAULT_ANGLE = 22.5 * (Math.PI / 180);
+const DEFAULT_ANGLE = 0 * (Math.PI / 180);
 
-class Player extends Entity {
+export class Player extends Entity {
     constructor() {
         super(
             'assets/img/player/default.svg',
             document.body.clientWidth / 2,
             document.body.clientHeight / 2
         );
+
+        this.mouseX = 0;
+        this.mouseY = 0;
 
         this.upKey = DEFAULT_UP;
         this.downKey = DEFAULT_DOWN;
@@ -19,30 +24,49 @@ class Player extends Entity {
 
         this.angleOffset = DEFAULT_ANGLE;
         this.pressedKeys = {};
-        this.setupControls();
     }
 
-    rotate(ev) {
-        let dx = ev.pageX - this.x;
-        let dy = ev.pageY - this.y;
+    connectedCallback() {
+        super.connectedCallback();
+        this.setupControls();
+        this.id = 'player';
+    }
+
+    update(dt) {
+        super.update(dt);
+        this.rotate();
+    }
+
+    rotate() {
+        let dx = this.mouseX - this.x;
+        let dy = this.mouseY - this.y;
 
         this.angle = this.angleOffset + Math.atan2(dy, dx) + Math.PI / 2;
         this.refreshPosition();
     }
 
-    updatePosition(direction) {
-        let rad = direction * (Math.PI / 180);
-        this.x += Math.sin(rad) * this.moveRate;
-        this.y -= Math.cos(rad) * this.moveRate;
+    move(dt) {
+        let dx = 0, dy = 0;
 
+        if (this.pressedKeys[this.upKey])       dy -= 1;
+        if (this.pressedKeys[this.downKey])     dy += 1;
+        if (this.pressedKeys[this.leftKey])     dx -= 1;
+        if (this.pressedKeys[this.rightKey])    dx += 1;
+
+        if (dx === 0 && dy === 0)
+            return;
+
+        let direction = Math.hypot(dx, dy);
+        this.x += (dx / direction) * this.moveRate * dt;
+        this.y += (dy / direction) * this.moveRate * dt;
+
+        // Fix x/y < 0
         this.x = this.x % document.body.clientWidth;
         this.y = this.y % document.body.clientHeight;
 
-        this.move();
         this.refreshPosition();
     }
 
-    move() { }
     primary() { }
     secondary() { }
     reload() { }
@@ -53,62 +77,15 @@ class Player extends Entity {
 
     setupControls() {
         document.addEventListener('mousemove', ev => {
-            this.rotate(ev);
+            this.mouseX = ev.pageX;
+            this.mouseY = ev.pageY;
         });
 
         document.addEventListener('keydown', ev => {
-            if (ev.defaultPrevented)
-                return;
-
-            let direction = 0;
             this.pressedKeys[ev.code] = true;
-
-            switch (ev.code) {
-                case this.upKey:
-                    direction = 0;
-
-                    if (this.pressedKeys[this.leftKey])
-                        direction -= 45;
-
-                    if (this.pressedKeys[this.rightKey])
-                        direction += 45;
-                    break;
-                case this.downKey:
-                    direction = 180;
-
-                    if (this.pressedKeys[this.leftKey])
-                        direction += 45;
-
-                    if (this.pressedKeys[this.rightKey])
-                        direction -= 45;
-                    break;
-                case this.leftKey:
-                    direction = 270;
-
-                    if (this.pressedKeys[this.upKey])
-                        direction += 45;
-
-                    if (this.pressedKeys[this.downKey])
-                        direction -= 45;
-                    break;
-                case this.rightKey:
-                    direction = 90;
-
-                    if (this.pressedKeys[this.upKey])
-                        direction -= 45;
-
-                    if (this.pressedKeys[this.downKey])
-                        direction += 45;
-                    break;
-            }
-
-            this.updatePosition(direction);
         });
 
         document.addEventListener('keyup', ev => {
-            if (ev.defaultPrevented)
-                return;
-
             this.pressedKeys[ev.code] = false;
         });
     }
