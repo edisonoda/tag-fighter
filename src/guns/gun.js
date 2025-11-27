@@ -42,11 +42,12 @@ export class Gun {
         if (this.reloading || this.lastShot < 1 / this.fireRate)
             return;
 
-        if (this.ammo < 0)
+        this.ammo--;
+
+        if (this.ammo <= 0)
             this.reload();
 
         this.lastShot = 0;
-        this.ammo--;
 
         this.instantiateProj(direction, force);
     }
