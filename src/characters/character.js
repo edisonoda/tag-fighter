@@ -1,19 +1,17 @@
-import { Entity } from "../entity.js";
-
-export const DEFAULT_ACC = 30;
-export const DEFAULT_FRICTION = 5;
-export const DEFAULT_SPEED = 250;
+import { Entity, DEFAULT_SIZE, DEFAULT_HITBOX, DEFAULT_ACC, DEFAULT_FRICTION, DEFAULT_SPEED } from "../entity.js";
 
 export class Character extends Entity {
     constructor(
         sprite,
+        size = DEFAULT_SIZE,
+        hitbox = DEFAULT_HITBOX,
         acc = DEFAULT_ACC,
         friction = DEFAULT_FRICTION,
         maxSpeed = DEFAULT_SPEED,
         x = document.body.clientWidth / 2,
         y = document.body.clientHeight / 2
     ) {
-        super(sprite, acc, friction, maxSpeed, x, y);
+        super(sprite, size, hitbox, acc, friction, maxSpeed, x, y);
         this.angle = 0;
     }
 

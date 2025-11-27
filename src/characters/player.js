@@ -8,8 +8,10 @@ const DEFAULT_RIGHT = 'KeyD';
 const DEFAULT_ANGLE = 0 * (Math.PI / 180);
 
 export class Player extends Character {
+    static group = 'Player';
+
     constructor() {
-        super('assets/img/player/default.svg');
+        super('assets/img/player/default.svg', 30, .5);
 
         this.mouseX = 0;
         this.mouseY = 0;

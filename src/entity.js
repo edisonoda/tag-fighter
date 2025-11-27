@@ -1,7 +1,27 @@
+export const DEFAULT_SIZE = 30; // In pixels
+export const DEFAULT_HITBOX = .8;
+
+export const DEFAULT_ACC = 30;
+export const DEFAULT_FRICTION = 5;
+export const DEFAULT_SPEED = 250;
+
 export class Entity extends HTMLElement {
-    constructor(sprite, acc, friction, maxSpeed, x = 0, y = 0) {
+    static group = 'Entity';
+
+    constructor(
+        sprite,
+        size = DEFAULT_SIZE,
+        hitbox = DEFAULT_HITBOX,
+        acc = DEFAULT_ACC,
+        friction = DEFAULT_FRICTION,
+        maxSpeed = DEFAULT_SPEED,
+        x = 0,
+        y = 0
+    ) {
         super();
         this.sprite = sprite;
+        this.size = size;
+        this.hitbox = hitbox;
         this.x = x;
         this.y = y;
 
@@ -13,7 +33,10 @@ export class Entity extends HTMLElement {
 
     connectedCallback() {
         this.style.backgroundImage = `url('${this.sprite}')`;
+        this.style.height = `${this.size}px`;
+        this.style.width = `${this.size}px`;
         this.classList.add('entity');
+
         this.refreshPosition();
     }
 
