@@ -126,3 +126,10 @@ button {
   cursor: pointer;
   transform: scale(1.1);
 }
+
+#main {
+  display: block;
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+}
