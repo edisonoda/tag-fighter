@@ -1,4 +1,4 @@
-import { Entity } from './entity.js';
+import { Character } from './character.js';
 
 const DEFAULT_UP = 'KeyW';
 const DEFAULT_DOWN = 'KeyS';
@@ -7,7 +7,7 @@ const DEFAULT_RIGHT = 'KeyD';
 const DEFAULT_ANGLE = 0 * (Math.PI / 180);
 const DEFAULT_CROSSHAIR = 'shot.svg';
 
-export class Player extends Entity {
+export class Player extends Character {
     constructor() {
         super(
             'assets/img/player/default.svg',
@@ -56,20 +56,16 @@ export class Player extends Entity {
         if (this.pressedKeys[this.leftKey])     dx -= 1;
         if (this.pressedKeys[this.rightKey])    dx += 1;
 
-        if (dx === 0 && dy === 0)
-            return;
+        if (dx !== 0 || dy !== 0) {
+            let direction = Math.hypot(dx, dy);
+            this.speed.x += (dx / direction) * this.acc * dt;
+            this.speed.y += (dy / direction) * this.acc * dt;
+        }
 
-        let direction = Math.hypot(dx, dy);
-        this.x += (dx / direction) * this.moveRate * dt;
-        this.y += (dy / direction) * this.moveRate * dt;
-
-        // Fix x/y < 0
-        this.x = this.x % document.body.clientWidth;
-        this.y = this.y % document.body.clientHeight;
-
-        this.refreshPosition();
+        super.move(dt);
     }
 
+    collide(entity) { }
     primary() { }
     secondary() { }
     reload() { }

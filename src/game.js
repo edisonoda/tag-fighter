@@ -1,4 +1,4 @@
-import { Player } from "./player.js";
+import { Player } from "./characters/player.js";
 
 export class Game {
     static main = document.getElementById('main');
