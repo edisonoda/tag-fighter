@@ -1,7 +1,6 @@
 import { Projectile } from "./projectile.js";
 
 export class Shot extends Projectile {
-    static group = 'Projectile';
     static tag = 'app-shot';
 
     constructor() {
@@ -20,10 +19,6 @@ export class Shot extends Projectile {
 
     move(dt) {
         super.move(dt);
-    }
-
-    collide(entity) {
-
     }
 }
 

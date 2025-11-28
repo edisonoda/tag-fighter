@@ -1,12 +1,12 @@
 export const DEFAULT_SIZE = 30; // In pixels
-export const DEFAULT_HITBOX = .8;
+export const DEFAULT_HITBOX = DEFAULT_SIZE * .8 / 2;
 
 export const DEFAULT_ACC = 10;
 export const DEFAULT_FRICTION = 3;
-export const DEFAULT_SPEED = 5;
 
 export class Entity extends HTMLElement {
-    static group = 'Entity';
+    static category = '';
+    static group = '';
 
     constructor() {
         super();
@@ -20,10 +20,9 @@ export class Entity extends HTMLElement {
         this.hitbox = hitbox;
     }
 
-    setupMovement(acc = DEFAULT_ACC, friction = DEFAULT_FRICTION, maxSpeed = DEFAULT_SPEED) {
+    setupMovement(acc = DEFAULT_ACC, friction = DEFAULT_FRICTION) {
         this.acc = acc;
         this.friction = friction;
-        this.maxSpeed = maxSpeed;
         this.speed = { x: 0, y: 0 };
     }
 
@@ -58,12 +57,6 @@ export class Entity extends HTMLElement {
     move(dt) {
         this.speed.x *= 1 / (1 + this.friction * dt);
         this.speed.y *= 1 / (1 + this.friction * dt);
-
-        let currSpeed = Math.hypot(this.speed.x, this.speed.y);
-        if (currSpeed > this.maxSpeed) {
-            this.speed.x = (this.speed.x / currSpeed) * this.maxSpeed;
-            this.speed.y = (this.speed.y / currSpeed) * this.maxSpeed;
-        }
 
         this.x += this.speed.x;
         this.y += this.speed.y;

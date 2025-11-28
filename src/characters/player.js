@@ -1,5 +1,6 @@
 import { Character } from './character.js';
 import { Gun } from '../guns/gun.js';
+import { Game } from '../game.js';
 
 const DEFAULT_UP = 'KeyW';
 const DEFAULT_DOWN = 'KeyS';
@@ -8,13 +9,14 @@ const DEFAULT_RIGHT = 'KeyD';
 const DEFAULT_ANGLE = 0 * (Math.PI / 180);
 
 const DEFAULT_SIZE = 30; // In pixels
-const DEFAULT_HITBOX = .5;
+const DEFAULT_HITBOX = DEFAULT_SIZE * .5 / 2;
 
 const DEFAULT_ACC = 30;
 const DEFAULT_FRICTION = 5;
-const DEFAULT_SPEED = 20;
 
 const DEFAULT_SHOOT_OFFSET = 15;
+const DEFAULT_KNOCK_FORCE = 200;
+const DEFAULT_KNOCK_RADIUS = 500;
 
 export class Player extends Character {
     static group = 'Player';
@@ -24,7 +26,7 @@ export class Player extends Character {
         super();
 
         this.setupSprite('assets/img/player/default.svg', DEFAULT_SIZE, DEFAULT_HITBOX);
-        this.setupMovement(DEFAULT_ACC, DEFAULT_FRICTION, DEFAULT_SPEED);
+        this.setupMovement(DEFAULT_ACC, DEFAULT_FRICTION);
         this.setupPosition(document.body.clientWidth / 2, document.body.clientHeight / 2);
 
         this.mouseX = 0;
@@ -92,7 +94,23 @@ export class Player extends Character {
         super.move(dt);
     }
 
-    collide(entity) { }
+    collide(entity) {
+        if (entity.constructor.group === 'Enemy') {
+            Game.entities.forEach(e => {
+                if (e.constructor.group === 'Enemy') {
+                    const dx = this.x - e.x;
+                    const dy = this.y - e.y;
+                    const distance = Math.hypot(dx, dy);
+                    let ratio = 1 - (distance / DEFAULT_KNOCK_RADIUS);
+
+                    if (ratio < 0)
+                        ratio = 0;
+
+                    e.pushBack(this, DEFAULT_KNOCK_FORCE * ratio);
+                }
+            });
+        }
+    }
 
     primary() {
         let dx = this.mouseX - this.x;

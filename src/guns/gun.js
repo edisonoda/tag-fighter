@@ -24,7 +24,7 @@ export class Gun {
         this.projectile = null;
         this.changeProjectile(Shot);
 
-        Game.addEntity(this);
+        Game.addEntity(this, false);
     }
 
     update(dt) {
@@ -78,7 +78,6 @@ export class Gun {
         );
 
         Game.addEntity(proj);
-        Game.main.append(proj);
     }
 
     changeProjectile(projClass) {

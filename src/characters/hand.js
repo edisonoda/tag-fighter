@@ -29,7 +29,10 @@ export class Hand extends Enemy {
         super.move(dt);
     }
 
-    collide(entity) { }
+    collide(entity) {
+        super.collide(entity);
+    }
+
     primary() { }
     secondary() { }
     reload() { }

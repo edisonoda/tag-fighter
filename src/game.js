@@ -8,9 +8,14 @@ export class Game {
     static paused = false;
     static entities = [];
 
-    static addEntity(entity) {
-        if (entity)
-            this.entities.push(entity);
+    static addEntity(entity, html = true) {
+        if (!entity)
+            return;
+
+        this.entities.push(entity);
+
+        if (html)
+            this.main.append(entity);
     }
 
     static removeEntity(entity) {
@@ -24,17 +29,22 @@ export class Game {
     }
 
     constructor() {
-        Game.entities.push(Game.player);
-        Game.main.append(Game.player);
+        Game.addEntity(Game.player);
 
         // Temporary
-        const hand = document.createElement('app-hand');
-        Game.entities.push(hand);
-        Game.main.append(hand);
+        for (let i = 0; i < 10; i++) {
+            let x = Math.random() * document.body.clientWidth;
+            let y = Math.random() * document.body.clientHeight;
 
-        // for (let i = 0; i < 10; i++) {
+            let hand = document.createElement('app-hand');
+            hand.setupPosition(x, y);
 
-        // }
+            Game.addEntity(hand);
+        }
+
+        // const hand = document.createElement('app-hand');
+        // Game.entities.push(hand);
+        // Game.main.append(hand);
 
         this.lastTime = performance.now();
         requestAnimationFrame(t => this.loop(t));
@@ -52,6 +62,23 @@ export class Game {
 
     update(dt) {
         Game.entities.forEach(e => e.update(dt));
+
+        for (let i = 0; i < Game.entities.length - 1; i++) {
+            let e1 = Game.entities[i];
+
+            for (let j = i + 1; j < Game.entities.length; j++) {
+                let e2 = Game.entities[j];
+
+                const dx = e1.x + e1.hitbox - (e2.x + e2.hitbox);
+                const dy = e1.y + e1.hitbox - (e2.y + e2.hitbox);
+                const distance = Math.hypot(dx, dy);
+                
+                if (distance < e1.hitbox + e2.hitbox) {
+                    e1.collide(e2);
+                    e2.collide(e1);
+                }
+            }
+        }
     }
 }
 

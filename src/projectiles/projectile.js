@@ -2,22 +2,24 @@ import { Entity } from "../entity.js";
 import { Game } from "../game.js";
 
 export const DEFAULT_SIZE = 20; // In pixels
-export const DEFAULT_HITBOX = .5;
+export const DEFAULT_HITBOX = DEFAULT_SIZE * .5;
 
 export const DEFAULT_ACC = 0;
 export const DEFAULT_FRICTION = 1;
-export const DEFAULT_SPEED = 500;
 export const DEFAULT_TIME = 3;
+export const DEFAULT_IMPACT = 10;
 
 export class Projectile extends Entity {
+    static category = 'Projectile';
     static group = 'Projectile';
     static tag = '';
 
-    constructor(time = DEFAULT_TIME) {
+    constructor(time = DEFAULT_TIME, impact = DEFAULT_IMPACT) {
         super();
 
         this.shooter = null;
         this.time = time;
+        this.impact = impact;
     }
     
     setupSprite(sprite, size = DEFAULT_SIZE, hitbox = DEFAULT_HITBOX) {
@@ -26,10 +28,9 @@ export class Projectile extends Entity {
         this.hitbox = hitbox;
     }
 
-    setupMovement(acc = DEFAULT_ACC, friction = DEFAULT_FRICTION, maxSpeed = DEFAULT_SPEED) {
+    setupMovement(acc = DEFAULT_ACC, friction = DEFAULT_FRICTION) {
         this.acc = acc;
         this.friction = friction;
-        this.maxSpeed = maxSpeed;
         this.speed = { x: 0, y: 0 };
     }
 
@@ -59,6 +60,9 @@ export class Projectile extends Entity {
     }
 
     collide(entity) {
+        if (entity.constructor.group === this.shooter.group)
+            return;
 
+        
     }
 }

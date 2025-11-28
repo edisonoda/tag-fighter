@@ -18,7 +18,10 @@ export class Enemy extends Character {
         this.style.transform = `rotate(${this.angle}rad)`;
     }
     
-    collide(entity) { }
+    collide(entity) {
+        super.collide(entity);
+    }
+
     primary() { }
     secondary() { }
     reload() { }
