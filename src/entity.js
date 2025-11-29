@@ -1,27 +1,35 @@
-export const DEFAULT_SIZE = 30; // In pixels
-export const DEFAULT_HITBOX = DEFAULT_SIZE * .8 / 2;
-
-export const DEFAULT_ACC = 10;
-export const DEFAULT_FRICTION = 3;
+import { Game } from "./game.js";
+import * as Constants from './utils/constants.js';
 
 export class Entity extends HTMLElement {
     static category = '';
     static group = '';
+    static tag = '';
 
-    constructor() {
+    static instantiate(x = 0, y = 0) {
+        let obj = document.createElement(this.tag);
+        obj.x = x;
+        obj.y = y;
+
+        Game.addEntity(obj);
+        return obj;
+    }
+
+    constructor({
+        sprite,
+        size = Constants.SIZE,
+        hitbox = Constants.HITBOX,
+        acceleration = Constants.ACCELERATION,
+        friction = Constants.FRICTION
+    }) {
         super();
         this.x = 0;
         this.y = 0;
-    }
 
-    setupSprite(sprite, size = DEFAULT_SIZE, hitbox = DEFAULT_HITBOX) {
         this.sprite = sprite;
         this.size = size;
         this.hitbox = hitbox;
-    }
-
-    setupMovement(acc = DEFAULT_ACC, friction = DEFAULT_FRICTION) {
-        this.acc = acc;
+        this.acceleration = acceleration;
         this.friction = friction;
         this.speed = { x: 0, y: 0 };
     }

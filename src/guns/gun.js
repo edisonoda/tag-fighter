@@ -66,18 +66,15 @@ export class Gun {
     }
 
     instantiateProj(direction, force) {
-        let proj = document.createElement(this.projectile.tag);
-        let dx = Math.cos(direction);
-        let dy = Math.sin(direction);
+        const dx = Math.cos(direction);
+        const dy = Math.sin(direction);
 
-        proj.setupProjectile(
-            this.owner,
-            { x: dx * force, y: dy * force },
+        const proj = this.projectile.instantiate(
             this.owner.x + dx * this.owner.shootOffset,
             this.owner.y + dy * this.owner.shootOffset
         );
 
-        Game.addEntity(proj);
+        proj.setupProjectile(this.owner, { x: dx * force, y: dy * force });
     }
 
     changeProjectile(projClass) {

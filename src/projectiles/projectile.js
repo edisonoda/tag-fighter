@@ -1,50 +1,32 @@
 import { Entity } from "../entity.js";
 import { Game } from "../game.js";
-
-export const DEFAULT_SIZE = 20; // In pixels
-export const DEFAULT_HITBOX = DEFAULT_SIZE * .5;
-
-export const DEFAULT_ACC = 0;
-export const DEFAULT_FRICTION = 1;
-export const DEFAULT_TIME = 3;
-export const DEFAULT_IMPACT = 10;
+import * as Constants from '../utils/constants.js';
 
 export class Projectile extends Entity {
     static category = 'Projectile';
     static group = 'Projectile';
     static tag = '';
 
-    constructor(time = DEFAULT_TIME, impact = DEFAULT_IMPACT) {
-        super();
+    constructor({
+        sprite,
+        size = Constants.PROJ_SIZE,
+        hitbox = Constants.PROJ_HITBOX,
+        acceleration = Constants.PROJ_ACC,
+        friction = Constants.PROJ_FRICTION,
+        time = Constants.PROJ_DURATION,
+        impact = Constants.PROJ_IMPACT
+    }) {
+        super({ sprite, size, hitbox, acceleration, friction });
 
         this.shooter = null;
         this.time = time;
         this.impact = impact;
     }
-    
-    setupSprite(sprite, size = DEFAULT_SIZE, hitbox = DEFAULT_HITBOX) {
-        this.sprite = sprite;
-        this.size = size;
-        this.hitbox = hitbox;
-    }
 
-    setupMovement(acc = DEFAULT_ACC, friction = DEFAULT_FRICTION) {
-        this.acc = acc;
-        this.friction = friction;
-        this.speed = { x: 0, y: 0 };
-    }
-
-    setupProjectile(shooter, speed, x, y) {
+    setupProjectile(shooter, speed) {
         this.shooter = shooter;
-
         this.speed.x = speed.x;
         this.speed.y = speed.y;
-        this.x = x;
-        this.y = y;
-    }
-
-    connectedCallback() {
-        super.connectedCallback();
     }
 
     update(dt) {
@@ -55,14 +37,8 @@ export class Projectile extends Entity {
             Game.removeEntity(this);
     }
 
-    move(dt) {
-        super.move(dt);
-    }
-
     collide(entity) {
         if (entity.constructor.group === this.shooter.group)
             return;
-
-        
     }
 }

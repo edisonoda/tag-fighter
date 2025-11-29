@@ -1,13 +1,21 @@
 import { Character } from './character.js';
 import { Game } from "../game.js";
-
-export const DEFAULT_DMG = 3;
+import * as Constants from '../utils/constants.js';
 
 export class Enemy extends Character {
     static group = 'Enemy';
 
-    constructor(damage = DEFAULT_DMG) {
-        super();
+    constructor({
+        sprite,
+        size = Constants.SIZE,
+        hitbox = Constants.HITBOX,
+        acceleration = Constants.ACCELERATION,
+        friction = Constants.FRICTION,
+        life = Constants.LIFE,
+        mass = Constants.MASS,
+        damage = Constants.ENEMY_DMG
+    }) {
+        super({ sprite, size, hitbox, acceleration, friction, life, mass });
 
         this.damage = damage;
         this.player = Game.player;

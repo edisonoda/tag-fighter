@@ -1,20 +1,13 @@
 import { Enemy } from "./enemy.js";
 
-const DEFAULT_ANGLE = 22.5 * (Math.PI / 180);
+// const DEFAULT_ANGLE = 22.5 * (Math.PI / 180);
 
 export class Hand extends Enemy {
     static tag = 'app-hand';
 
     constructor() {
-        super();
-
-        this.setupSprite('assets/img/enemies/hand_closed.svg');
-        this.setupMovement();
+        super({ sprite: 'assets/img/enemies/hand_closed.svg' });
     }
-
-    // update(dt) {
-    //     super.update(dt);
-    // }
     
     move(dt) {
         let dx = this.player.x - this.x;
@@ -22,24 +15,12 @@ export class Hand extends Enemy {
 
         if (dx !== 0 || dy !== 0) {
             let direction = Math.hypot(dx, dy);
-            this.speed.x += (dx / direction) * this.acc * dt;
-            this.speed.y += (dy / direction) * this.acc * dt;
+            this.speed.x += (dx / direction) * this.acceleration * dt;
+            this.speed.y += (dy / direction) * this.acceleration * dt;
         }
 
         super.move(dt);
     }
-
-    collide(entity) {
-        super.collide(entity);
-    }
-
-    primary() { }
-    secondary() { }
-    reload() { }
-    dash() { }
-    leftUtil() { }
-    rightUtil() { }
-    special() { }
 }
 
 customElements.define(Hand.tag, Hand);

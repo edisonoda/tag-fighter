@@ -1,15 +1,20 @@
 import { Entity } from "../entity.js";
-
-export const DEFAULT_LIFE = 5;
-export const DEFAULT_MASS = 10;
-export const DEFAULT_DAMAGED = 1;
+import * as Constants from '../utils/constants.js';
 
 export class Character extends Entity {
     static category = 'Character';
     static tag = '';
 
-    constructor(life = DEFAULT_LIFE, mass = DEFAULT_MASS) {
-        super();
+    constructor({
+        sprite,
+        size = Constants.SIZE,
+        hitbox = Constants.HITBOX,
+        acceleration = Constants.ACCELERATION,
+        friction = Constants.FRICTION,
+        life = Constants.LIFE,
+        mass = Constants.MASS
+    }) {
+        super({ sprite, size, hitbox, acceleration, friction });
         this.angle = 0;
 
         this.life = life;
@@ -20,17 +25,12 @@ export class Character extends Entity {
         this.slowed = false;
 
         this.angleOffset = 0;
-        this.damagedDuration = DEFAULT_DAMAGED;
     }
 
     setupPosition(x, y) {
         this.x = x;
         this.y = y;
     }
-
-    // connectedCallback() {
-    //     super.connectedCallback();
-    // }
 
     update(dt) {
         super.update(dt);
@@ -46,8 +46,6 @@ export class Character extends Entity {
         super.refreshPosition();
         this.style.transform = `rotate(${this.angle}rad)`;
     }
-
-    // move(dt) { }
 
     collide(entity) {
         if (entity.constructor.group === 'Projectile')
@@ -72,13 +70,13 @@ export class Character extends Entity {
         entity.y += ny * push;
     }
 
-    // primary() { }
-    // secondary() { }
-    // reload() { }
-    // dash() { }
-    // leftUtil() { }
-    // rightUtil() { }
-    // special() { }
+    primary() { }
+    secondary() { }
+    reload() { }
+    dash() { }
+    leftUtil() { }
+    rightUtil() { }
+    special() { }
 
     pushBack(entity, force) {
         let dx = entity.x - this.x;
