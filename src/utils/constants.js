@@ -23,7 +23,7 @@ export const PLAYER_LIFE = 100;
 export const SHOOT_OFFSET = 15;
 export const KNOCK_FORCE = 200;
 export const KNOCK_RADIUS = 500;
-export const INVULNERABLE_TIME = 3;
+export const INVULNERABLE_TIME = 1.5;
 
 // Enemy
 export const ENEMY_DMG = 3;
@@ -41,6 +41,6 @@ export const PROJ_DURATION = 3;
 export const PROJ_IMPACT = 10;
 
 // Effects
-export const FX_INTENSITY = .5;
-export const FX_DURATION = 3;
+export const FX_INTENSITY = .1;
+export const FX_DURATION = 1.5;
 export const FX_INTERVAL = .3;

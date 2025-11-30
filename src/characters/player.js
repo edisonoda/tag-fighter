@@ -34,10 +34,13 @@ export class Player extends Character {
         this.shootOffset = Constants.SHOOT_OFFSET;
         this.primaryGun = null;
 
+        this.blinkEffect = new Blinking({ target: this, duration: Constants.INVULNERABLE_TIME });
+        this.effects.push(this.blinkEffect);
         this.hitOverlay = document.getElementById('hit-overlay');
-        this.hitOverlay.addEventListener('transitionend', () =>
+        this.hitOverlay.addEventListener('transitionend', () => 
             this.hitOverlay.classList.remove('hit')
         );
+        this.damaged = false;
 
         // Modifiers
         this.damage
@@ -61,6 +64,9 @@ export class Player extends Character {
 
         if (this.pressedMouse['0'])
             this.primary();
+        
+        if (!this.blinkEffect.active)
+            this.damaged = false;
     }
 
     rotate() {
@@ -89,7 +95,7 @@ export class Player extends Character {
     }
 
     collide(entity) {
-        if (entity.constructor.group === 'Enemy') {
+        if (entity.constructor.group === 'Enemy' && !this.damaged) {
             Game.entities.forEach(e => {
                 if (e.constructor.group === 'Enemy') {
                     const dx = this.x - e.x;
@@ -107,8 +113,14 @@ export class Player extends Character {
     }
 
     getHit(damage) {
+        if (this.damaged)
+            return;
+
         super.getHit(damage);
         this.hitOverlay.classList.add('hit');
+
+        this.blinkEffect.activate();
+        this.damaged = true;
     }
 
     primary() {

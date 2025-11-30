@@ -32,6 +32,8 @@ export class Entity extends HTMLElement {
         this.acceleration = acceleration;
         this.friction = friction;
         this.speed = { x: 0, y: 0 };
+
+        this.effects = [];
     }
 
     connectedCallback() {
@@ -45,6 +47,7 @@ export class Entity extends HTMLElement {
 
     update(dt) {
         this.move(dt);
+        this.effects.forEach(e => e.update(dt));
     }
 
     refreshPosition() {
