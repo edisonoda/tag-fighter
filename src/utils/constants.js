@@ -30,17 +30,23 @@ export const ENEMY_DMG = 3;
 
 // Gun
 export const CROSSHAIR = 'shot.svg';
+export const FIRE_RATE = 5;
+export const RELOAD_TIME = 1;
+export const AMMO = 10;
 
 // Projectile
 export const PROJ_SIZE = 20; // In pixels
 export const PROJ_HITBOX = SIZE * .5 / 2;
 
+export const PROJ_FORCE = 12;
 export const PROJ_ACCELERATION = 0;
 export const PROJ_FRICTION = 1;
-export const PROJ_DURATION = 3;
+
+export const PROJ_DMG = 1;
+export const PROJ_DURATION = 2;
 export const PROJ_IMPACT = 10;
 
 // Effects
 export const FX_INTENSITY = .1;
-export const FX_DURATION = 1.5;
+export const FX_DURATION = 0.2;
 export const FX_INTERVAL = .3;

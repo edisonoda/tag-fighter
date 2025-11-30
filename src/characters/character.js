@@ -1,5 +1,6 @@
 import { Entity } from "../entity.js";
 import { Game } from "../game.js";
+import { Blinking } from '../effects/blinking.js';
 import * as Constants from '../utils/constants.js';
 
 export class Character extends Entity {
@@ -13,7 +14,8 @@ export class Character extends Entity {
         acceleration = Constants.ACCELERATION,
         friction = Constants.FRICTION,
         life = Constants.LIFE,
-        mass = Constants.MASS
+        mass = Constants.MASS,
+        blinkingDuration = Constants.FX_DURATION
     }) {
         super({ sprite, size, hitbox, acceleration, friction });
         this.angle = 0;
@@ -26,6 +28,9 @@ export class Character extends Entity {
         this.slowed = false;
 
         this.angleOffset = 0;
+
+        this.blinkEffect = new Blinking({ target: this, duration: blinkingDuration });
+        this.effects.push(this.blinkEffect);
     }
 
     setupPosition(x, y) {
@@ -73,8 +78,12 @@ export class Character extends Entity {
 
     getHit(damage) {
         this.life -= damage;
-        if (this.life <= 0)
+        if (this.life <= 0) {
             this.die();
+            return;
+        }
+
+        this.blinkEffect.activate();
     }
 
     die() {

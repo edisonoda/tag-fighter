@@ -1,7 +1,6 @@
 import { Character } from './character.js';
 import { Gun } from '../guns/gun.js';
 import { Game } from '../game.js';
-import { Blinking } from '../effects/blinking.js';
 import * as Constants from '../utils/constants.js';
 
 export class Player extends Character {
@@ -15,7 +14,8 @@ export class Player extends Character {
             hitbox: Constants.PLAYER_HITBOX,
             acceleration: Constants.PLAYER_ACCELERATION,
             friction: Constants.PLAYER_FRICTION,
-            life: Constants.PLAYER_LIFE
+            life: Constants.PLAYER_LIFE,
+            blinkingDuration: Constants.INVULNERABLE_TIME
         });
         this.setupPosition(document.body.clientWidth / 2, document.body.clientHeight / 2);
 
@@ -34,8 +34,6 @@ export class Player extends Character {
         this.shootOffset = Constants.SHOOT_OFFSET;
         this.primaryGun = null;
 
-        this.blinkEffect = new Blinking({ target: this, duration: Constants.INVULNERABLE_TIME });
-        this.effects.push(this.blinkEffect);
         this.hitOverlay = document.getElementById('hit-overlay');
         this.hitOverlay.addEventListener('transitionend', () => 
             this.hitOverlay.classList.remove('hit')
@@ -118,8 +116,6 @@ export class Player extends Character {
 
         super.getHit(damage);
         this.hitOverlay.classList.add('hit');
-
-        this.blinkEffect.activate();
         this.damaged = true;
     }
 
@@ -128,7 +124,7 @@ export class Player extends Character {
         let dy = this.mouseY - this.y;
 
         let direction = this.angleOffset + Math.atan2(dy, dx);
-        this.primaryGun.shoot(direction, 20);
+        this.primaryGun.shoot(direction, Constants.PROJ_FORCE);
     }
 
     secondary() { }
@@ -139,7 +135,7 @@ export class Player extends Character {
     special() { }
 
     changePrimary(gun) {
-        this.primaryGun = new gun(this);
+        this.primaryGun = new gun({ owner: this });
         this.changeCrosshair(gun.crosshair);
     }
 

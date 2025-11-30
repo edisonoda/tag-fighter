@@ -13,12 +13,14 @@ export class Projectile extends Entity {
         hitbox = Constants.PROJ_HITBOX,
         acceleration = Constants.PROJ_ACC,
         friction = Constants.PROJ_FRICTION,
+        damage = Constants.PROJ_DMG,
         time = Constants.PROJ_DURATION,
         impact = Constants.PROJ_IMPACT
     }) {
         super({ sprite, size, hitbox, acceleration, friction });
 
         this.shooter = null;
+        this.damage = damage;
         this.time = time;
         this.impact = impact;
     }
@@ -38,7 +40,6 @@ export class Projectile extends Entity {
     }
 
     collide(entity) {
-        if (entity.constructor.group === this.shooter.group)
-            return;
+        return entity.constructor.group !== this.shooter.constructor.group;
     }
 }

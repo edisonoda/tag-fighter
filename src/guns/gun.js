@@ -1,21 +1,26 @@
 import { Game } from "../game.js";
 import { Shot } from "../projectiles/shot.js";
-
-const DEFAULT_CROSSHAIR = 'shot.svg';
+import * as Constants from "../utils/constants.js";
 
 export class Gun {
-    static crosshair = DEFAULT_CROSSHAIR;
+    static crosshair = Constants.CROSSHAIR;
 
-    constructor(owner) {
+    constructor({
+        owner,
+        fireRate = Constants.FIRE_RATE,
+        reloadTime = Constants.RELOAD_TIME,
+        ammo = Constants.AMMO,
+    }) {
         this.owner = owner;
 
-        this.fireRate = 10;
-        this.lastShot = 1 / this.fireRate;
-        this.totalReloadTime = 1;
-        this.reloadTime = 0;
+        this.shotTime = 1 / fireRate;
+        this.reloadTime = reloadTime;
+        this.ammo = ammo;
+
+        this.c_shotTime = this.shotTime;
+        this.c_reload = 0;
+        this.c_ammo = this.ammo;
         this.reloading = false;
-        this.totalAmmo = 10;
-        this.ammo = this.totalAmmo;
 
         // Modifiers
         this.damage
@@ -28,32 +33,32 @@ export class Gun {
     }
 
     update(dt) {
-        this.lastShot += dt;
+        this.c_shotTime += dt;
 
         if (this.reloading) {
-            this.reloadTime += dt;
+            this.c_reload += dt;
 
-            if (this.reloadTime >= this.totalReloadTime)
+            if (this.c_reload >= this.reloadTime)
                 this.finishReload();
         }
     }
 
     shoot(direction, force) {
-        if (this.reloading || this.lastShot < 1 / this.fireRate)
+        if (this.reloading || this.c_shotTime < this.shotTime)
             return;
 
-        this.ammo--;
+        this.c_ammo--;
 
-        if (this.ammo <= 0)
+        if (this.c_ammo <= 0)
             this.reload();
 
-        this.lastShot = 0;
+        this.c_shotTime = 0;
 
         this.instantiateProj(direction, force);
     }
 
     reload() {
-        if (this.ammo == this.totalAmmo)
+        if (this.c_ammo == this.ammo)
             return;
 
         this.reloading = true;
@@ -61,8 +66,8 @@ export class Gun {
 
     finishReload() {
         this.reloading = false;
-        this.reloadTime = 0;
-        this.ammo = this.totalAmmo;
+        this.c_reload = 0;
+        this.c_ammo = this.ammo;
     }
 
     instantiateProj(direction, force) {

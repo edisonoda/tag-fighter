@@ -1,3 +1,4 @@
+import { Game } from "../game.js";
 import { Projectile } from "./projectile.js";
 
 export class Shot extends Projectile {
@@ -9,6 +10,17 @@ export class Shot extends Projectile {
             size: 30,
             hitbox: 6
         });
+    }
+
+    collide(entity) {
+        if(!super.collide(entity))
+            return;
+
+        if (entity.constructor.category !== 'Character')
+            return;
+
+        entity.getHit(this.damage);
+        Game.removeEntity(this);
     }
 }
 
