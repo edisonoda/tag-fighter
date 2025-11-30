@@ -2,6 +2,7 @@ import { Entity } from "../entity.js";
 import { Game } from "../game.js";
 import { Blinking } from '../effects/blinking.js';
 import * as Constants from '../utils/constants.js';
+import { Gun } from "../guns/gun.js";
 
 export class Character extends Entity {
     static category = 'Character';
@@ -15,6 +16,7 @@ export class Character extends Entity {
         friction = Constants.FRICTION,
         life = Constants.LIFE,
         mass = Constants.MASS,
+        shootOffset = Constants.SHOOT_OFFSET,
         blinkingDuration = Constants.FX_DURATION
     }) {
         super({ sprite, size, hitbox, acceleration, friction });
@@ -28,6 +30,12 @@ export class Character extends Entity {
         this.slowed = false;
 
         this.angleOffset = 0;
+
+        this.shootOffset = shootOffset;
+        this.guns = {
+            primary: { class: Gun, instance: null },
+            secondary: { class: null, instance: null }
+        };
 
         this.blinkEffect = new Blinking({ target: this, duration: blinkingDuration });
         this.effects.push(this.blinkEffect);
@@ -90,13 +98,37 @@ export class Character extends Entity {
         Game.removeEntity(this);
     }
 
+    reload(gun) {
+        Object.values(this.guns).forEach(g => {
+            if (gun === g.instance)
+                gun.reload();
+        });
+    }
+
+    finishReload(gun) { }
     primary() { }
     secondary() { }
-    reload() { }
     dash() { }
     leftUtil() { }
     rightUtil() { }
     special() { }
+
+    changePrimary(gunClass) {
+        this.guns.primary = {
+            ...this.guns.primary,
+            class: gunClass,
+            instance: new gunClass({ owner: this })
+        };
+        this.changeCrosshair(gunClass.crosshair);
+    }
+
+    changeSecondary(gunClass) {
+        this.guns.secondary = {
+            ...this.guns.secondary,
+            class: gunClass,
+            instance: new gunClass({ owner: this })
+        };
+    }
 
     pushBack(entity, force) {
         let dx = entity.x - this.x;

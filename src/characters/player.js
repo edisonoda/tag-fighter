@@ -31,9 +31,6 @@ export class Player extends Character {
         this.pressedKeys = {};
         this.pressedMouse = {};
 
-        this.shootOffset = Constants.SHOOT_OFFSET;
-        this.primaryGun = null;
-
         this.hitOverlay = document.getElementById('hit-overlay');
         this.hitOverlay.addEventListener('transitionend', () => 
             this.hitOverlay.classList.remove('hit')
@@ -49,8 +46,19 @@ export class Player extends Character {
         this.projTime
     }
 
-    connectedCallback() {
-        super.connectedCallback();
+    async connectedCallback() {
+        await super.connectedCallback();
+
+        const response = await fetch(Constants.RELOAD_CIRCLE);
+        if (!response.ok) return;
+
+        this.innerHTML += (await response.text()).toString();
+
+        this.guns.primary.reloadCircle = document.getElementById('reload-circle-1');
+        this.guns.primary.maxReload = Constants.MAX_PRIMARY_RELOAD;
+
+        this.guns.secondary.reloadCircle = document.getElementById('reload-circle-2');
+        this.guns.secondary.maxReload = Constants.MAX_SECONDARY_RELOAD;
 
         this.changePrimary(Gun);
         this.setupControls();
@@ -65,6 +73,13 @@ export class Player extends Character {
         
         if (!this.blinkEffect.active)
             this.damaged = false;
+
+        Object.values(this.guns).forEach(g => {
+            if (g.instance?.reloading)
+                g.reloadCircle?.setAttribute('stroke-dasharray', `
+                    ${(g.instance.c_reload / g.instance.reloadTime) * g.maxReload} ${g.maxReload}
+                `);
+        });
     }
 
     rotate() {
@@ -119,25 +134,35 @@ export class Player extends Character {
         this.damaged = true;
     }
 
+    reload(gun) {
+        super.reload(gun);
+
+        Object.values(this.guns).forEach(g => {
+            if (g.instance === gun && g.reloadCircle)
+                g.reloadCircle.style.visibility = 'visible';
+        });
+    }
+
+    finishReload(gun) {
+        Object.values(this.guns).forEach(g => {
+            if (g.instance === gun && g.reloadCircle)
+                g.reloadCircle.style.visibility = 'hidden';
+        });
+    }
+
     primary() {
         let dx = this.mouseX - this.x;
         let dy = this.mouseY - this.y;
 
         let direction = this.angleOffset + Math.atan2(dy, dx);
-        this.primaryGun.shoot(direction, Constants.PROJ_FORCE);
+        this.guns.primary.instance?.shoot(direction, Constants.PROJ_FORCE);
     }
 
     secondary() { }
-    reload() { }
     dash() { }
     leftUtil() { }
     rightUtil() { }
     special() { }
-
-    changePrimary(gun) {
-        this.primaryGun = new gun({ owner: this });
-        this.changeCrosshair(gun.crosshair);
-    }
 
     setupControls() {
         document.addEventListener('mousemove', ev => {

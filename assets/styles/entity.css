@@ -1,11 +1,3 @@
 .entity {
     position: absolute;
-    height: 30px;
-    width: 30px;
-
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-
-    translate: -50% -50%;
 }

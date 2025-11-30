@@ -1,4 +1,4 @@
-export const SIZE = 30; // In pixels
+export const SIZE = 32; // In pixels
 export const HITBOX = SIZE * .8 / 2;
 
 export const ACCELERATION = 10;
@@ -16,7 +16,7 @@ export const KEY_RIGHT = 'KeyD';
 
 export const PLAYER_HITBOX = SIZE * .5 / 2;
 
-export const PLAYER_ACCELERATION = 30;
+export const PLAYER_ACCELERATION = 32;
 export const PLAYER_FRICTION = 5;
 export const PLAYER_LIFE = 100;
 
@@ -33,6 +33,11 @@ export const CROSSHAIR = 'shot.svg';
 export const FIRE_RATE = 5;
 export const RELOAD_TIME = 1;
 export const AMMO = 10;
+
+export const MAX_PRIMARY_RELOAD = 2 * Math.PI * 14;
+export const MAX_SECONDARY_RELOAD = 2 * Math.PI * 5;
+
+export const RELOAD_CIRCLE = 'assets/img/icons/reload_circle.svg';
 
 // Projectile
 export const PROJ_SIZE = 20; // In pixels

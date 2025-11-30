@@ -1,0 +1,8 @@
+<svg id="reload-circle" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 32 32" transform="rotate(-90)">
+    <circle cx="16" cy="16" r="14" fill="none" stroke="var(--accent-color)" stroke-width="4" stroke-dashoffset=""
+            stroke-linecap="round" stroke-dasharray="0 88"
+            id="reload-circle-1" style="visibility: hidden" />
+    <circle cx="16" cy="16" r="5" fill="none" stroke="var(--accent-color)" stroke-width="10"
+            stroke-dasharray="0 32"
+            id="reload-circle-2" style="visibility: hidden" />
+</svg>

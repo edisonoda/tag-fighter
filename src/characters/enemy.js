@@ -32,12 +32,4 @@ export class Enemy extends Character {
         if (entity === this.player)
             this.player.getHit(this.damage);
     }
-
-    primary() { }
-    secondary() { }
-    reload() { }
-    dash() { }
-    leftUtil() { }
-    rightUtil() { }
-    special() { }
 }

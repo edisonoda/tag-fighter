@@ -36,8 +36,12 @@ export class Entity extends HTMLElement {
         this.effects = [];
     }
 
-    connectedCallback() {
-        this.style.backgroundImage = `url('${this.sprite}')`;
+    async connectedCallback() {
+        const response = await fetch(this.sprite);
+        if (!response.ok) return;
+
+        this.innerHTML = (await response.text()).toString();
+        
         this.style.height = `${this.size}px`;
         this.style.width = `${this.size}px`;
         this.classList.add('entity');
