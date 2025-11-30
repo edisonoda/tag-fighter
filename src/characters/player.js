@@ -27,7 +27,6 @@ export class Player extends Character {
         this.leftKey = Constants.KEY_LEFT;
         this.rightKey = Constants.KEY_RIGHT;
 
-        this.angleOffset = 0;
         this.pressedKeys = {};
         this.pressedMouse = {};
 

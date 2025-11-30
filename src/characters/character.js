@@ -16,6 +16,7 @@ export class Character extends Entity {
         friction = Constants.FRICTION,
         life = Constants.LIFE,
         mass = Constants.MASS,
+        angleOffset = 0,
         shootOffset = Constants.SHOOT_OFFSET,
         blinkingDuration = Constants.FX_DURATION
     }) {
@@ -29,7 +30,7 @@ export class Character extends Entity {
         this.stunned = false;
         this.slowed = false;
 
-        this.angleOffset = 0;
+        this.angleOffset = angleOffset;
 
         this.shootOffset = shootOffset;
         this.guns = {
