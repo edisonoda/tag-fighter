@@ -14,6 +14,12 @@ export const KEY_DOWN = 'KeyS';
 export const KEY_LEFT = 'KeyA';
 export const KEY_RIGHT = 'KeyD';
 
+export const KEY_RELOAD = 'KeyR';
+export const KEY_DASH = 'Shift';
+export const KEY_LEFT_UTIL = 'Q';
+export const KEY_RIGHT_UTIL = 'E';
+export const KEY_SPECIAL = 'Space';
+
 export const PLAYER_HITBOX = SIZE * .5 / 2;
 
 export const PLAYER_ACCELERATION = 32;

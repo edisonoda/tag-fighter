@@ -101,7 +101,7 @@ export class Character extends Entity {
 
     reload(gun) {
         Object.values(this.guns).forEach(g => {
-            if (gun === g.instance)
+            if (gun !== null && gun === g.instance)
                 gun.reload();
         });
     }

@@ -27,6 +27,12 @@ export class Player extends Character {
         this.leftKey = Constants.KEY_LEFT;
         this.rightKey = Constants.KEY_RIGHT;
 
+        this.reloadKey = Constants.KEY_RELOAD;
+        this.dashKey = Constants.KEY_DASH;
+        this.leftUtilKey = Constants.KEY_LEFT_UTIL;
+        this.rightUtilKey = Constants.KEY_RIGHT_UTIL;
+        this.specialKey = Constants.KEY_SPECIAL;
+
         this.pressedKeys = {};
         this.pressedMouse = {};
 
@@ -69,16 +75,29 @@ export class Player extends Character {
 
         if (this.pressedMouse['0'])
             this.primary();
+
+        if (this.pressedMouse['2'])
+            this.secondary();
+
+        if (this.pressedKeys[this.reloadKey])
+            this.reloadAll();
+
+        if (this.pressedKeys[this.dashKey])
+            this.dash();
+
+        if (this.pressedKeys[this.leftUtilKey])
+            this.leftUtil();
+
+        if (this.pressedKeys[this.rightUtilKey])
+            this.rightUtil();
+
+        if (this.pressedKeys[this.specialKey])
+            this.special();
         
         if (!this.blinkEffect.active)
             this.damaged = false;
 
-        Object.values(this.guns).forEach(g => {
-            if (g.instance?.reloading)
-                g.reloadCircle?.setAttribute('stroke-dasharray', `
-                    ${(g.instance.c_reload / g.instance.reloadTime) * g.maxReload} ${g.maxReload}
-                `);
-        });
+        this.checkReload();
     }
 
     rotate() {
@@ -133,6 +152,10 @@ export class Player extends Character {
         this.damaged = true;
     }
 
+    reloadAll() {
+        Object.values(this.guns).forEach(g => this.reload(g.instance));
+    }
+
     reload(gun) {
         super.reload(gun);
 
@@ -177,12 +200,25 @@ export class Player extends Character {
             this.pressedKeys[ev.code] = false;
         });
 
+        document.addEventListener('contextmenu', ev => {
+            ev.preventDefault();
+        });
+
         document.addEventListener('mousedown', ev => {
             this.pressedMouse[ev.button.toString()] = true;
         });
 
         document.addEventListener('mouseup', ev => {
             this.pressedMouse[ev.button.toString()] = false;
+        });
+    }
+
+    checkReload() {
+        Object.values(this.guns).forEach(g => {
+            if (g.instance?.reloading)
+                g.reloadCircle?.setAttribute('stroke-dasharray', `
+                    ${(g.instance.c_reload / g.instance.reloadTime) * g.maxReload} ${g.maxReload}
+                `);
         });
     }
 
