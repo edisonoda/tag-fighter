@@ -10,8 +10,8 @@ export class Hand extends Enemy {
     }
     
     move(dt) {
-        let dx = this.player.x - this.x;
-        let dy = this.player.y - this.y;
+        let dx = this.player?.x - this.x;
+        let dy = this.player?.y - this.y;
 
         if (dx !== 0 || dy !== 0) {
             let direction = Math.hypot(dx, dy);

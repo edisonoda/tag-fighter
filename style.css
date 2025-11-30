@@ -37,6 +37,9 @@ body {
   background-color: var(--background-color-1);
   color: var(--accent-color);
   cursor: var(--crosshair) 16 16, auto;
+
+  height: 100vh;
+  width: 100vw;
 }
 
 button {
@@ -44,8 +47,15 @@ button {
 }
 
 @keyframes openmodal {
-  0% { scale: 0; opacity: 0; }
-  100% { scale: 1; opacity: 1; }
+  0% {
+    scale: 0;
+    opacity: 0;
+  }
+
+  100% {
+    scale: 1;
+    opacity: 1;
+  }
 }
 
 #main-menu {
@@ -124,14 +134,59 @@ button {
 
 #main-menu nav ul button:hover {
   background-color: var(--primary-color);
+  color: #dddddd;
   cursor: pointer;
   transform: scale(1.1);
 }
 
-#main {
+#game {
   display: block;
+  box-sizing: border-box;
   overflow: hidden;
   position: relative;
   height: 100vh;
   width: 100vw;
+}
+
+#ui {
+  display: block;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+
+  pointer-events: none;
+  background: transparent;
+
+  z-index: 50;
+}
+
+#hit-overlay {
+  display: block;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+
+  pointer-events: none;
+  
+  background-image:
+    linear-gradient(90deg,  rgba(150, 20, 20) 0%, rgba(150, 20, 20, .5) 30%, transparent 100%),
+    linear-gradient(270deg, rgba(150, 20, 20) 0%, rgba(150, 20, 20, .5) 30%, transparent 100%),
+    linear-gradient(180deg, rgba(150, 20, 20) 0%, rgba(150, 20, 20, .5) 30%, transparent 100%),
+    linear-gradient(0deg,   rgba(150, 20, 20) 0%, rgba(150, 20, 20, .5) 30%, transparent 100%);
+
+  background-size: 50px 100%, 50px 100%, 100% 50px, 100% 50px;
+  background-position: left center, right center, top center, bottom center;
+  background-repeat: no-repeat;
+
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
+
+#hit-overlay.hit {
+  opacity: 1;
+  transition: opacity .1s ease-in;
 }

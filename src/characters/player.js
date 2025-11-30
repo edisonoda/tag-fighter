@@ -1,6 +1,7 @@
 import { Character } from './character.js';
 import { Gun } from '../guns/gun.js';
 import { Game } from '../game.js';
+import { Blinking } from '../effects/blinking.js';
 import * as Constants from '../utils/constants.js';
 
 export class Player extends Character {
@@ -13,7 +14,8 @@ export class Player extends Character {
             size: Constants.SIZE,
             hitbox: Constants.PLAYER_HITBOX,
             acceleration: Constants.PLAYER_ACCELERATION,
-            friction: Constants.PLAYER_FRICTION
+            friction: Constants.PLAYER_FRICTION,
+            life: Constants.PLAYER_LIFE
         });
         this.setupPosition(document.body.clientWidth / 2, document.body.clientHeight / 2);
 
@@ -31,6 +33,11 @@ export class Player extends Character {
 
         this.shootOffset = Constants.SHOOT_OFFSET;
         this.primaryGun = null;
+
+        this.hitOverlay = document.getElementById('hit-overlay');
+        this.hitOverlay.addEventListener('transitionend', () =>
+            this.hitOverlay.classList.remove('hit')
+        );
 
         // Modifiers
         this.damage
@@ -97,6 +104,11 @@ export class Player extends Character {
                 }
             });
         }
+    }
+
+    getHit(damage) {
+        super.getHit(damage);
+        this.hitOverlay.classList.add('hit');
     }
 
     primary() {

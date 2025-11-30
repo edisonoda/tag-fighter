@@ -3,7 +3,7 @@ import { Player } from "./characters/player.js";
 import { Hand } from "./characters/hand.js";
 
 export class Game {
-    static main = document.getElementById('main');
+    static html = document.getElementById('game');
     static player = document.createElement('app-player');
     static paused = false;
     static entities = [];
@@ -15,7 +15,7 @@ export class Game {
         this.entities.push(entity);
 
         if (html)
-            this.main.append(entity);
+            this.html.append(entity);
     }
 
     static removeEntity(entity) {
@@ -23,7 +23,7 @@ export class Game {
 
         let index = this.entities.findIndex(e => e === entity);
         if (index !== -1) {
-            this.main.removeChild(entity);
+            this.html.removeChild(entity);
             this.entities.splice(index, 1);
         }
     }

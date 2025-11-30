@@ -28,6 +28,9 @@ export class Enemy extends Character {
     
     collide(entity) {
         super.collide(entity);
+
+        if (entity === this.player)
+            this.player.getHit(this.damage);
     }
 
     primary() { }

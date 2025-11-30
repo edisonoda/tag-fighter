@@ -1,4 +1,5 @@
 import { Entity } from "../entity.js";
+import { Game } from "../game.js";
 import * as Constants from '../utils/constants.js';
 
 export class Character extends Entity {
@@ -68,6 +69,16 @@ export class Character extends Entity {
         this.y -= ny * push;
         entity.x += nx * push;
         entity.y += ny * push;
+    }
+
+    getHit(damage) {
+        this.life -= damage;
+        if (this.life <= 0)
+            this.die();
+    }
+
+    die() {
+        Game.removeEntity(this);
     }
 
     primary() { }
