@@ -50,7 +50,7 @@ export class Gun {
         this.c_ammo--;
 
         if (this.c_ammo <= 0)
-            this.owner.reload(this);
+            this.reload();
 
         this.c_shotTime = 0;
 
@@ -61,6 +61,7 @@ export class Gun {
         if (this.c_ammo == this.ammo)
             return;
 
+        this.owner.reload(this);
         this.reloading = true;
     }
 

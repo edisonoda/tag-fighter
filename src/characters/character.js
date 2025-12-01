@@ -99,13 +99,7 @@ export class Character extends Entity {
         Game.removeEntity(this);
     }
 
-    reload(gun) {
-        Object.values(this.guns).forEach(g => {
-            if (gun !== null && gun === g.instance)
-                gun.reload();
-        });
-    }
-
+    reload(gun) { }
     finishReload(gun) { }
     primary() { }
     secondary() { }

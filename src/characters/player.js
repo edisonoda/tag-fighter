@@ -153,12 +153,10 @@ export class Player extends Character {
     }
 
     reloadAll() {
-        Object.values(this.guns).forEach(g => this.reload(g.instance));
+        Object.values(this.guns).forEach(g => g.instance?.reload());
     }
 
     reload(gun) {
-        super.reload(gun);
-
         Object.values(this.guns).forEach(g => {
             if (g.instance === gun && g.reloadCircle)
                 g.reloadCircle.style.visibility = 'visible';
