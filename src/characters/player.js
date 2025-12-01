@@ -117,21 +117,24 @@ export class Player extends Character {
     }
 
     collide(entity) {
-        if (entity.constructor.group === 'Enemy' && !this.damaged) {
-            Game.entities.forEach(e => {
-                if (e.constructor.group === 'Enemy') {
-                    const dx = this.x - e.x;
-                    const dy = this.y - e.y;
-                    const distance = Math.hypot(dx, dy);
-                    let ratio = 1 - (distance / Constants.KNOCK_RADIUS);
+        if (entity.constructor.group === 'Enemy' && !this.damaged)
+            this.pushBack(entity, Constants.KNOCK_FORCE);
 
-                    if (ratio < 0)
-                        ratio = 0;
+        // if (entity.constructor.group === 'Enemy' && !this.damaged) {
+        //     Game.entities.forEach(e => {
+        //         if (e.constructor.group === 'Enemy') {
+        //             const dx = this.x - e.x;
+        //             const dy = this.y - e.y;
+        //             const distance = Math.hypot(dx, dy);
+        //             let ratio = 1 - (distance / Constants.KNOCK_RADIUS);
 
-                    e.pushBack(this, Constants.KNOCK_FORCE * ratio);
-                }
-            });
-        }
+        //             if (ratio < 0)
+        //                 ratio = 0;
+
+        //             e.pushBack(this, Constants.KNOCK_FORCE * ratio);
+        //         }
+        //     });
+        // }
     }
 
     getHit(damage) {
