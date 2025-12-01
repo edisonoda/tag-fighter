@@ -7,8 +7,6 @@ export class Shot extends Projectile {
     constructor() {
         super({
             sprite: 'assets/img/projectiles/shot.svg',
-            size: 30,
-            hitbox: 6
         });
     }
 

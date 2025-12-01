@@ -1,6 +1,5 @@
 import { Character } from './character.js';
 import { Gun } from '../guns/gun.js';
-import { Game } from '../game.js';
 import * as Constants from '../utils/constants.js';
 
 export class Player extends Character {
@@ -41,14 +40,6 @@ export class Player extends Character {
             this.hitOverlay.classList.remove('hit')
         );
         this.damaged = false;
-
-        // Modifiers
-        this.damage
-        this.fireRate
-        this.reloadSpeed
-        this.projFriction
-        this.projForce
-        this.projTime
     }
 
     async connectedCallback() {
@@ -175,7 +166,7 @@ export class Player extends Character {
         let dy = this.mouseY - this.y;
 
         let direction = this.angleOffset + Math.atan2(dy, dx);
-        this.guns.primary.instance?.shoot(direction, Constants.PROJ_FORCE);
+        this.guns.primary.instance?.shoot(direction);
     }
 
     secondary() { }

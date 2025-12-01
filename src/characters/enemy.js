@@ -13,14 +13,21 @@ export class Enemy extends Character {
         friction = Constants.FRICTION,
         life = Constants.LIFE,
         mass = Constants.MASS,
+        damage = Constants.ENEMY_DMG,
+        gunDamage = 1,
+        gunFireRate = 1,
+        gunForce = 1,
+        gunReloadTime = 1,
+        gunAmmo = 1,
+        projFriction = 1,
+        projDuration = 1,
+        projSize = 1,
         angleOffset = 0,
         shootOffset = Constants.SHOOT_OFFSET,
-        blinkingDuration = Constants.FX_DURATION,
-        damage = Constants.ENEMY_DMG
+        blinkingDuration = Constants.FX_DURATION
     }) {
-        super({ sprite, size, hitbox, acceleration, friction, life, mass, angleOffset, shootOffset, blinkingDuration });
+        super(arguments[0]);
 
-        this.damage = damage;
         this.player = Game.player;
     }
 

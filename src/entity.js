@@ -1,4 +1,5 @@
 import { Game } from "./game.js";
+import { Stat } from "./stat.js";
 import * as Constants from './utils/constants.js';
 
 export class Entity extends HTMLElement {
@@ -25,33 +26,36 @@ export class Entity extends HTMLElement {
         super();
         this.x = 0;
         this.y = 0;
-
-        this.sprite = sprite;
-        this.size = size;
-        this.hitbox = hitbox;
-        this.acceleration = acceleration;
-        this.friction = friction;
         this.speed = { x: 0, y: 0 };
+        this.sprite = sprite;
 
+        this._size = new Stat(size);
+        this._acceleration = new Stat(acceleration);
+        this._friction = new Stat(friction);
+        this._hitbox = hitbox;
+        
         this.effects = [];
     }
+
+    get size() { return this._size.value; }
+    get hitbox() { return this._hitbox * this.size; }
+    get acceleration() { return this._acceleration.value; }
+    get friction() { return this._friction.value; }
 
     async connectedCallback() {
         const response = await fetch(this.sprite);
         if (!response.ok) return;
 
         this.innerHTML = (await response.text()).toString();
-        
-        this.style.height = `${this.size}px`;
-        this.style.width = `${this.size}px`;
         this.classList.add('entity');
-
         this.refreshPosition();
     }
 
     update(dt) {
         this.move(dt);
         this.effects.forEach(e => e.update(dt));
+        
+        this.style.scale = this.size / 32;
     }
 
     refreshPosition() {

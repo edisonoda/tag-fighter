@@ -1,4 +1,5 @@
 import { Entity } from "../entity.js";
+import { Stat } from "../stat.js";
 import { Game } from "../game.js";
 import { Blinking } from '../effects/blinking.js';
 import * as Constants from '../utils/constants.js';
@@ -16,22 +17,41 @@ export class Character extends Entity {
         friction = Constants.FRICTION,
         life = Constants.LIFE,
         mass = Constants.MASS,
+        damage = Constants.ENEMY_DMG,
+        gunDamage = 1,
+        gunFireRate = 1,
+        gunForce = 1,
+        gunReloadTime = 1,
+        gunAmmo = 1,
+        projFriction = 1,
+        projDuration = 1,
+        projSize = 1,
         angleOffset = 0,
         shootOffset = Constants.SHOOT_OFFSET,
         blinkingDuration = Constants.FX_DURATION
     }) {
         super({ sprite, size, hitbox, acceleration, friction });
-        this.angle = 0;
 
-        this.life = life;
-        this.mass = mass;
+        this._life = new Stat(life);
+        this._mass = new Stat(mass);
+        this._damage = new Stat(damage);
+        this._gunDamage = new Stat(gunDamage);
+        this._gunFireRate = new Stat(gunFireRate);
+        this._gunForce = new Stat(gunForce);
+        this._gunReloadTime = new Stat(gunReloadTime);
+        this._gunAmmo = new Stat(gunAmmo);
+        this._projFriction = new Stat(projFriction);
+        this._projDuration = new Stat(projDuration);
+        this._projSize = new Stat(projSize);
+
+        this.hp = this.life;
 
         this.damaged = false;
         this.stunned = false;
         this.slowed = false;
 
+        this.angle = 0;
         this.angleOffset = angleOffset;
-
         this.shootOffset = shootOffset;
         this.guns = {
             primary: { class: Gun, instance: null },
@@ -41,6 +61,18 @@ export class Character extends Entity {
         this.blinkEffect = new Blinking({ target: this, duration: blinkingDuration });
         this.effects.push(this.blinkEffect);
     }
+
+    get life() { return this._life.value; }
+    get mass() { return this._mass.value; }
+    get damage() { return this._damage.value; }
+    get gunDamage() { return this._gunDamage.value; }
+    get gunFireRate() { return this._gunFireRate.value; }
+    get gunForce() { return this._gunForce.value; }
+    get gunReloadTime() { return this._gunReloadTime.value; }
+    get gunAmmo() { return this._gunAmmo.value; }
+    get projFriction() { return this._projFriction.value; }
+    get projDuration() { return this._projDuration.value; }
+    get projSize() { return this._projSize.value; }
 
     setupPosition(x, y) {
         this.x = x;
@@ -86,8 +118,8 @@ export class Character extends Entity {
     }
 
     getHit(damage) {
-        this.life -= damage;
-        if (this.life <= 0) {
+        this.hp -= damage;
+        if (this.hp <= 0) {
             this.die();
             return;
         }
