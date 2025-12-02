@@ -1,3 +1,4 @@
+// Entity
 export const SIZE = 32; // In pixels
 export const HITBOX = .8 / 2;
 
@@ -39,9 +40,13 @@ export const CROSSHAIR = 'shot.svg';
 export const GUN_DMG = 1;
 export const FIRE_RATE = 5;
 export const FIRE_FORCE = 12;
+export const GUN_SHOTS = 1;
+export const GUN_BURST = 1;
+export const GUN_SPREAD = 45 * (Math.PI / 180);
 export const RELOAD_TIME = 1;
 export const AMMO = 10;
 
+export const MAX_SPREAD = 10 * (Math.PI / 180);
 export const MAX_PRIMARY_RELOAD = 2 * Math.PI * 14;
 export const MAX_SECONDARY_RELOAD = 2 * Math.PI * 5;
 

@@ -1,9 +1,9 @@
 import { Entity } from "../entity.js";
 import { Stat } from "../stat.js";
 import { Game } from "../game.js";
+import { Gun } from "../guns/gun.js";
 import { Blinking } from '../effects/blinking.js';
 import * as Constants from '../utils/constants.js';
-import { Gun } from "../guns/gun.js";
 
 export class Character extends Entity {
     static category = 'Character';
