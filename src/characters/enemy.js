@@ -1,6 +1,8 @@
 import { Character } from './character.js';
 import { Game } from "../game.js";
+import { EventManager } from '../events/event_manager.js';
 import * as Constants from '../utils/constants.js';
+import * as Events from '../events/events.js';
 
 export class Enemy extends Character {
     static group = 'Enemy';
@@ -29,6 +31,7 @@ export class Enemy extends Character {
         super(arguments[0]);
 
         this.player = Game.player;
+        this.eventManager = EventManager.getInstance();
     }
 
     refreshPosition() {
@@ -41,5 +44,15 @@ export class Enemy extends Character {
 
         if (entity === this.player)
             this.player.getHit(this.damage);
+    }
+
+    getHit(damage) {
+        super.getHit(damage);
+        this.eventManager.notify(Events.ENEMY_HIT, { enemy: this, damage });
+    }
+
+    die() {
+        super.die();
+        this.eventManager.notify(Events.ENEMY_KILLED, { enemy: this });
     }
 }

@@ -1,6 +1,8 @@
 import { Character } from './character.js';
 import { Gun } from '../guns/gun.js';
+import { EventManager } from '../events/event_manager.js';
 import * as Constants from '../utils/constants.js';
+import * as Events from '../events/events.js';
 
 export class Player extends Character {
     static group = 'Player';
@@ -17,6 +19,7 @@ export class Player extends Character {
             blinkingDuration: Constants.INVULNERABLE_TIME
         });
         this.setupPosition(document.body.clientWidth / 2, document.body.clientHeight / 2);
+        this.eventManager = EventManager.getInstance();
 
         this.mouseX = 0;
         this.mouseY = 0;
@@ -111,14 +114,27 @@ export class Player extends Character {
             let direction = Math.hypot(dx, dy);
             this.speed.x += (dx / direction) * this.acceleration * dt;
             this.speed.y += (dy / direction) * this.acceleration * dt;
+            this.eventManager.notify(Events.MOVED, { direction });
         }
 
         super.move(dt);
     }
 
     collide(entity) {
-        if (entity.constructor.group === 'Enemy' && !this.damaged)
-            this.pushBack(entity, Constants.KNOCK_FORCE);
+        switch (entity.constructor.group) {
+            case 'Enemy':
+                if (!this.damaged) {
+                    this.pushBack(entity, Constants.KNOCK_FORCE);
+                    this.eventManager.notify(Events.COLLIDED_ENEMY, { enemy: entity });
+                }
+                break;
+            case 'Projectile':
+                if (entity.shooter !== player) {
+                    // TODO: collide with projectile
+                    this.eventManager.notify(Events.COLLIDED_PROJ, { projectile: entity });
+                }
+            default: break;
+        }
 
         // if (entity.constructor.group === 'Enemy' && !this.damaged) {
         //     Game.entities.forEach(e => {
@@ -142,8 +158,16 @@ export class Player extends Character {
             return;
 
         super.getHit(damage);
+
         this.hitOverlay.classList.add('hit');
         this.damaged = true;
+
+        this.eventManager.notify(Events.DAMAGED, { damage });
+    }
+    
+    die() {
+        super.die();
+        this.eventManager.notify(Events.DIED);
     }
 
     reloadAll() {
@@ -162,21 +186,53 @@ export class Player extends Character {
             if (g.instance === gun && g.reloadCircle)
                 g.reloadCircle.style.visibility = 'hidden';
         });
+        
+        this.eventManager.notify(Events.RELOADED, { gun });
     }
 
     primary() {
+        if (!this.guns.primary.instance)
+            return;
+
+        this.shoot(this.guns.primary.instance);
+        this.eventManager.notify(Events.PRIMARY);
+    }
+
+    secondary() {
+        if (!this.guns.secondary.instance)
+            return;
+        
+        this.shoot(this.guns.secondary.instance);
+        this.eventManager.notify(Events.SECONDARY);
+    }
+
+    shoot(gun) {
         let dx = this.mouseX - this.x;
         let dy = this.mouseY - this.y;
 
         let direction = this.angleOffset + Math.atan2(dy, dx);
-        this.guns.primary.instance?.shoot(direction);
+        gun.shoot(direction);
     }
 
-    secondary() { }
-    dash() { }
-    leftUtil() { }
-    rightUtil() { }
-    special() { }
+    dash() {
+        // TODO: dash
+        this.eventManager.notify(Events.DASHED);
+    }
+
+    leftUtil() {
+        // TODO: left util
+        this.eventManager.notify(Events.L_UTIL);
+    }
+
+    rightUtil() {
+        // TODO: right util
+        this.eventManager.notify(Events.R_UTIL);
+    }
+
+    special() {
+        // TODO: special
+        this.eventManager.notify(Events.SPECIAL);
+    }
 
     setupControls() {
         document.addEventListener('mousemove', ev => {

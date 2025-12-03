@@ -1,4 +1,6 @@
 import { Player } from "./characters/player.js";
+import { EventManager } from "./events/event_manager.js";
+import * as Events from "./events/events.js";
 // Temporary
 import { Hand } from "./characters/hand.js";
 
@@ -30,6 +32,8 @@ export class Game {
 
     constructor() {
         Game.addEntity(Game.player);
+
+        this.eventManager = EventManager.getInstance();
 
         // Temporary
         for (let i = 0; i < 10; i++) {
@@ -79,6 +83,8 @@ export class Game {
                 }
             }
         }
+
+        this.eventManager.notify(Events.UPDATED);
     }
 }
 
