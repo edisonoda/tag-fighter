@@ -90,18 +90,19 @@ export class Gun {
     }
 
     shootBurst() {
-        this.c_burst--;
-        this.c_burstTime = 0;
-
         if (this.reloading)
             return;
 
-        let c_angle = this.direction - (this.spread * ((this.shots - 1) / 2));
+        let dt = this.spread / (this.shots + 1);
+        let c_angle = this.direction - (this.spread / 2) + dt;
 
         for (let i = 0; i < this.shots; i++) {
             this.instantiateProj(c_angle);
-            c_angle += this.spread;
+            c_angle += dt;
         }
+
+        this.c_burst--;
+        this.c_burstTime = 0;
 
         if (this.c_ammo <= 0 && this.c_burst <= 0)
             this.reload();
@@ -120,6 +121,8 @@ export class Gun {
 
         this.reloading = false;
         this.c_reload = 0;
+        this.c_shotTime = 0;
+        this.c_burstTime = 0;
         this.c_ammo = this.ammo;
     }
 
