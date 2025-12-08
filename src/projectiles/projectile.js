@@ -6,10 +6,9 @@ import * as Constants from '../utils/constants.js';
 export class Projectile extends Entity {
     static category = 'Projectile';
     static group = 'Projectile';
-    static tag = '';
 
     constructor({
-        sprite,
+        sprite, gun, shooter, speed,
         size = Constants.PROJ_SIZE,
         hitbox = Constants.PROJ_HITBOX,
         acceleration = Constants.PROJ_ACCELERATION,
@@ -17,11 +16,16 @@ export class Projectile extends Entity {
         duration = Constants.PROJ_DURATION,
         // impact = Constants.PROJ_IMPACT,
         damage = 1,
+        x = 0,
+        y = 0
     }) {
-        super({ sprite, size, hitbox, acceleration, friction });
+        super({ sprite, size, hitbox, acceleration, friction, x, y });
+        
+        this.gun = gun;
+        this.shooter = shooter;
+        this.speed.x = speed.x;
+        this.speed.y = speed.y;
 
-        this.gun = null;
-        this.shooter = null;
         this._duration = new Stat(duration);
         this._damage = new Stat(damage);
         // this.impact = impact;
@@ -33,13 +37,6 @@ export class Projectile extends Entity {
     get friction() { return this._friction.value * this.gun?.projFriction; }
     get duration() { return this._duration.value * this.gun?.projDuration; }
     get damage() { return this._damage.value * this.gun?.damage; }
-
-    setupProjectile(gun, shooter, speed) {
-        this.gun = gun;
-        this.shooter = shooter;
-        this.speed.x = speed.x;
-        this.speed.y = speed.y;
-    }
 
     update(dt) {
         super.update(dt);

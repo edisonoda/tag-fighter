@@ -26,4 +26,6 @@ export class TimedEffect extends Effect {
 
         this.apply(dt);
     }
+    
+    draw(context) { }
 }

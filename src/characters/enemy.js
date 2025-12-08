@@ -26,17 +26,13 @@ export class Enemy extends Character {
         projSize = 1,
         angleOffset = 0,
         shootOffset = Constants.SHOOT_OFFSET,
-        blinkingDuration = Constants.FX_DURATION
+        blinkingDuration = Constants.FX_DURATION,
+        x = 0, y = 0
     }) {
         super(arguments[0]);
 
         this.player = Game.player;
         this.eventManager = EventManager.getInstance();
-    }
-
-    refreshPosition() {
-        super.refreshPosition();
-        this.style.transform = `rotate(${this.angle}rad)`;
     }
     
     collide(entity) {

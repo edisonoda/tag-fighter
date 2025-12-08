@@ -7,7 +7,6 @@ import * as Constants from '../utils/constants.js';
 
 export class Character extends Entity {
     static category = 'Character';
-    static tag = '';
 
     constructor({
         sprite,
@@ -26,11 +25,12 @@ export class Character extends Entity {
         projFriction = 1,
         projDuration = 1,
         projSize = 1,
-        angleOffset = 0,
         shootOffset = Constants.SHOOT_OFFSET,
-        blinkingDuration = Constants.FX_DURATION
+        blinkingDuration = Constants.FX_DURATION,
+        angleOffset = 0,
+        x = 0, y = 0
     }) {
-        super({ sprite, size, hitbox, acceleration, friction });
+        super({ sprite, size, angleOffset, hitbox, acceleration, friction, x, y });
 
         this._life = new Stat(life);
         this._mass = new Stat(mass);
@@ -50,8 +50,6 @@ export class Character extends Entity {
         this.stunned = false;
         this.slowed = false;
 
-        this.angle = 0;
-        this.angleOffset = angleOffset;
         this.shootOffset = shootOffset;
         this.guns = {
             primary: { class: Gun, instance: null },
@@ -74,24 +72,9 @@ export class Character extends Entity {
     get projDuration() { return this._projDuration.value; }
     get projSize() { return this._projSize.value; }
 
-    setupPosition(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-
     update(dt) {
         super.update(dt);
         this.rotate();
-    }
-
-    rotate() {
-        this.angle = this.angleOffset + Math.atan2(this.speed.y, this.speed.x) + Math.PI / 2;
-        this.refreshPosition();
-    }
-
-    refreshPosition() {
-        super.refreshPosition();
-        this.style.transform = `rotate(${this.angle}rad)`;
     }
 
     collide(entity) {

@@ -27,23 +27,26 @@ export class Blinking extends TimedEffect {
             this.c_intensity = this.intensity;
             this.direction *= -1;
         }
-
-        this.target.style.opacity = this.c_intensity;
     }
 
     update(dt) {
         if (!this.active) return;
 
         this.elapsed += dt;
-        if (this.elapsed >= this.duration) {
-            this.reset();
-            return;
-        }
-
         this.apply(dt);
     }
 
-    reset() {
+    draw(context) {
+        if (!this.active) return;
+        if (this.elapsed >= this.duration) {
+            this.reset(context);
+            return;
+        }
+
+        context.globalAlpha = this.c_intensity;
+    }
+
+    reset(context) {
         this.elapsed = 0;
         this.direction = 1;
         this.active = false;
@@ -52,6 +55,8 @@ export class Blinking extends TimedEffect {
         this.c_intensity = this.intensity;
         this.speed = (1 - this.intensity) / this.interval;
         
-        this.target.style.opacity = 1;
+        // context.save();
+        // context.globalAlpha = 1;
+        // context.restore();
     }
 } 

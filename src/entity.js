@@ -1,33 +1,30 @@
 import { Game } from "./game.js";
 import { Stat } from "./stat.js";
+import { ResourceManager } from "./resource_manager.js";
 import * as Constants from './utils/constants.js';
 
-export class Entity extends HTMLElement {
+export class Entity {
     static category = '';
     static group = '';
-    static tag = '';
-
-    static instantiate(x = 0, y = 0) {
-        let obj = document.createElement(this.tag);
-        obj.x = x;
-        obj.y = y;
-
-        Game.addEntity(obj);
-        return obj;
-    }
 
     constructor({
         sprite,
         size = Constants.SIZE,
         hitbox = Constants.HITBOX,
         acceleration = Constants.ACCELERATION,
-        friction = Constants.FRICTION
+        friction = Constants.FRICTION,
+        angleOffset = 0,
+        x = 0,
+        y = 0,
     }) {
-        super();
-        this.x = 0;
-        this.y = 0;
+        this.resourceManager = ResourceManager.getInstance();
+
+        this.x = x;
+        this.y = y;
         this.speed = { x: 0, y: 0 };
-        this.sprite = sprite;
+        this.angleOffset = angleOffset;
+        this.angle = 0;
+        this.sprite = null;
 
         this._size = new Stat(size);
         this._acceleration = new Stat(acceleration);
@@ -35,6 +32,11 @@ export class Entity extends HTMLElement {
         this._hitbox = hitbox;
         
         this.effects = [];
+
+        // this.classList.add('entity');
+
+        if (sprite)
+            this.resourceManager.load(sprite).then(img => this.sprite = img);
     }
 
     get size() { return this._size.value; }
@@ -42,35 +44,36 @@ export class Entity extends HTMLElement {
     get acceleration() { return this._acceleration.value; }
     get friction() { return this._friction.value; }
 
-    async connectedCallback() {
-        const response = await fetch(this.sprite);
-        if (!response.ok) return;
-
-        this.innerHTML = (await response.text()).toString();
-        this.classList.add('entity');
-        this.refreshPosition();
-    }
-
     update(dt) {
         this.move(dt);
         this.effects.forEach(e => e.update(dt));
-        
-        this.style.scale = this.size / 32;
     }
 
-    refreshPosition() {
-        if (this.x > document.body.clientWidth)
+    draw(context) {
+        if (!this.sprite) return;
+
+        if (this.x > context.canvas.width)
             this.x = 1;
         else if (this.x < 0)
-            this.x = document.body.clientWidth - 1;
+            this.x = context.canvas.width - 1;
 
-        if (this.y > document.body.clientHeight)
+        if (this.y > context.canvas.height)
             this.y = 1;
         else if (this.y < 0)
-            this.y = document.body.clientHeight - 1;
+            this.y = context.canvas.height - 1;
 
-        this.style.left = `${this.x}px`;
-        this.style.top = `${this.y}px`;
+        context.save();
+        context.translate(this.x, this.y);
+        context.rotate(this.angle);
+
+        this.effects.forEach(e => e.draw(context));
+
+        context.drawImage(this.sprite, -this.size / 2, -this.size / 2, this.size, this.size);
+        context.restore();
+    }
+
+    rotate() {
+        this.angle = this.angleOffset + Math.atan2(this.speed.y, this.speed.x) + Math.PI / 2;
     }
 
     move(dt) {
@@ -79,8 +82,6 @@ export class Entity extends HTMLElement {
 
         this.x += this.speed.x;
         this.y += this.speed.y;
-        
-        this.refreshPosition();
     }
 
     collide(entity) { }

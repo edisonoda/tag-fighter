@@ -1,12 +1,12 @@
 import { Character } from './character.js';
 import { Gun } from '../guns/gun.js';
+import { Game } from '../game.js';
 import { EventManager } from '../events/event_manager.js';
 import * as Constants from '../utils/constants.js';
 import * as Events from '../events/events.js';
 
 export class Player extends Character {
     static group = 'Player';
-    static tag = 'app-player';
 
     constructor() {
         super({
@@ -16,9 +16,10 @@ export class Player extends Character {
             acceleration: Constants.PLAYER_ACCELERATION,
             friction: Constants.PLAYER_FRICTION,
             life: Constants.PLAYER_LIFE,
-            blinkingDuration: Constants.INVULNERABLE_TIME
+            blinkingDuration: Constants.INVULNERABLE_TIME,
+            x: Game.canvas.width / 2,
+            y: Game.canvas.height / 2
         });
-        this.setupPosition(document.body.clientWidth / 2, document.body.clientHeight / 2);
         this.eventManager = EventManager.getInstance();
 
         this.mouseX = 0;
@@ -43,26 +44,26 @@ export class Player extends Character {
             this.hitOverlay.classList.remove('hit')
         );
         this.damaged = false;
-    }
-
-    async connectedCallback() {
-        await super.connectedCallback();
-
-        const response = await fetch(Constants.RELOAD_CIRCLE);
-        if (!response.ok) return;
-
-        this.innerHTML += (await response.text()).toString();
-
-        this.guns.primary.reloadCircle = document.getElementById('reload-circle-1');
-        this.guns.primary.maxReload = Constants.MAX_PRIMARY_RELOAD;
-
-        this.guns.secondary.reloadCircle = document.getElementById('reload-circle-2');
-        this.guns.secondary.maxReload = Constants.MAX_SECONDARY_RELOAD;
 
         this.changePrimary(Gun);
         this.setupControls();
         this.id = 'player';
     }
+
+    // async connectedCallback() {
+    //     await super.connectedCallback();
+
+    //     const response = await fetch(Constants.RELOAD_CIRCLE);
+    //     if (!response.ok) return;
+
+    //     this.innerHTML += (await response.text()).toString();
+
+    //     this.guns.primary.reloadCircle = document.getElementById('reload-circle-1');
+    //     this.guns.primary.maxReload = Constants.MAX_PRIMARY_RELOAD;
+
+    //     this.guns.secondary.reloadCircle = document.getElementById('reload-circle-2');
+    //     this.guns.secondary.maxReload = Constants.MAX_SECONDARY_RELOAD;
+    // }
 
     update(dt) {
         super.update(dt);
@@ -99,7 +100,6 @@ export class Player extends Character {
         let dy = this.mouseY - this.y;
 
         this.angle = this.angleOffset + Math.atan2(dy, dx) + Math.PI / 2;
-        this.refreshPosition();
     }
 
     move(dt) {
@@ -129,7 +129,7 @@ export class Player extends Character {
                 }
                 break;
             case 'Projectile':
-                if (entity.shooter !== player) {
+                if (entity.shooter !== this) {
                     // TODO: collide with projectile
                     this.eventManager.notify(Events.COLLIDED_PROJ, { projectile: entity });
                 }
@@ -274,5 +274,3 @@ export class Player extends Character {
         document.body.style.setProperty('--crosshair', `url('assets/img/crosshairs/${sprite}')`);
     }
 }
-
-customElements.define(Player.tag, Player);

@@ -2,12 +2,8 @@ import { Game } from "../game.js";
 import { Projectile } from "./projectile.js";
 
 export class Shot extends Projectile {
-    static tag = 'app-shot';
-
-    constructor() {
-        super({
-            sprite: 'assets/img/projectiles/shot.svg',
-        });
+    constructor({ gun, shooter, speed, x = 0, y = 0 }) {
+        super({ sprite: 'assets/img/projectiles/shot.svg', gun, shooter, speed, x: x, y: y });
     }
 
     collide(entity) {
@@ -21,5 +17,3 @@ export class Shot extends Projectile {
         Game.removeEntity(this);
     }
 }
-
-customElements.define(Shot.tag, Shot);

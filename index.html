@@ -9,8 +9,6 @@
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="assets/styles/entity.css" />
-  <link rel="stylesheet" href="assets/styles/player.css" />
 </head>
 
 <body class="dark-mode">
@@ -48,7 +46,9 @@
     <div id="hit-overlay"></div>
   </section>
 
-  <main id="game"></main>
+  <main>
+    <canvas id="game"></canvas>
+  </main>
 
   <script type="module" src="src/game.js"></script>
   <script type="module" src="src/menu.js"></script>

@@ -3,10 +3,8 @@ import { Enemy } from "./enemy.js";
 const ANGLE = 22.5 * (Math.PI / 180);
 
 export class Hand extends Enemy {
-    static tag = 'app-hand';
-
-    constructor() {
-        super({ sprite: 'assets/img/enemies/hand_closed.svg', angleOffset: ANGLE });
+    constructor({ x = 0, y = 0 }) {
+        super({ sprite: 'assets/img/enemies/hand_closed.svg', x, y, angleOffset: ANGLE });
     }
     
     move(dt) {
@@ -22,5 +20,3 @@ export class Hand extends Enemy {
         super.move(dt);
     }
 }
-
-customElements.define(Hand.tag, Hand);

@@ -1,9 +1,10 @@
+import { Entity } from "../entity.js";
 import { Game } from "../game.js";
 import { Shot } from "../projectiles/shot.js";
 import { Stat } from "../stat.js";
 import * as Constants from "../utils/constants.js";
 
-export class Gun {
+export class Gun extends Entity {
     static crosshair = Constants.CROSSHAIR;
 
     constructor({
@@ -20,6 +21,7 @@ export class Gun {
         projDuration = 1,
         projSize = 1,
     }) {
+        super({ sprite: null });
         this.owner = owner;
 
         this._damage = new Stat(damage);
@@ -45,7 +47,7 @@ export class Gun {
         this.projectile = null;
         this.changeProjectile(Shot);
 
-        Game.addEntity(this, false);
+        Game.addEntity(this);
     }
 
     get damage() { return this._damage.value * this.owner.gunDamage; }
@@ -130,12 +132,15 @@ export class Gun {
         const dx = Math.cos(direction);
         const dy = Math.sin(direction);
 
-        const proj = this.projectile.instantiate(
-            this.owner.x + dx * this.owner.shootOffset,
-            this.owner.y + dy * this.owner.shootOffset
-        );
+        const proj = new this.projectile({
+            gun: this,
+            shooter: this.owner,
+            x: this.owner.x + dx * this.owner.shootOffset,
+            y: this.owner.y + dy * this.owner.shootOffset,
+            speed: { x: dx * this.force, y: dy * this.force }
+        });
 
-        proj.setupProjectile(this, this.owner, { x: dx * this.force, y: dy * this.force });
+        Game.addEntity(proj);
     }
 
     changeProjectile(projClass) {
