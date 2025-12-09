@@ -127,7 +127,7 @@ export class Character extends Entity {
         this.guns.primary = {
             ...this.guns.primary,
             class: gunClass,
-            instance: new gunClass({ owner: this })
+            instance: new gunClass({ owner: this, is_primary: true })
         };
         this.changeCrosshair(gunClass.crosshair);
     }
@@ -136,7 +136,7 @@ export class Character extends Entity {
         this.guns.secondary = {
             ...this.guns.secondary,
             class: gunClass,
-            instance: new gunClass({ owner: this })
+            instance: new gunClass({ owner: this, is_primary: false })
         };
     }
 

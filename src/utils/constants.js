@@ -49,10 +49,9 @@ export const AMMO = 10;
 export const MAX_RATE = 8;
 export const MIN_SPREAD = 15 * (Math.PI / 180);
 export const MAX_BURST = 3;
-export const MAX_PRIMARY_RELOAD = 2 * Math.PI * 14;
-export const MAX_SECONDARY_RELOAD = 2 * Math.PI * 5;
 
-export const RELOAD_CIRCLE = 'assets/img/icons/reload_circle.svg';
+export const RELOAD_SIZE = 6;
+export const RELOAD_WIDTH = 2;
 
 // Projectile
 export const PROJ_SIZE = 32; // In pixels

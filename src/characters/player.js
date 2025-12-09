@@ -46,24 +46,10 @@ export class Player extends Character {
         this.damaged = false;
 
         this.changePrimary(Gun);
+        this.changeSecondary(Gun);
         this.setupControls();
         this.id = 'player';
     }
-
-    // async connectedCallback() {
-    //     await super.connectedCallback();
-
-    //     const response = await fetch(Constants.RELOAD_CIRCLE);
-    //     if (!response.ok) return;
-
-    //     this.innerHTML += (await response.text()).toString();
-
-    //     this.guns.primary.reloadCircle = document.getElementById('reload-circle-1');
-    //     this.guns.primary.maxReload = Constants.MAX_PRIMARY_RELOAD;
-
-    //     this.guns.secondary.reloadCircle = document.getElementById('reload-circle-2');
-    //     this.guns.secondary.maxReload = Constants.MAX_SECONDARY_RELOAD;
-    // }
 
     update(dt) {
         super.update(dt);
@@ -91,8 +77,6 @@ export class Player extends Character {
         
         if (!this.blinkEffect.active)
             this.damaged = false;
-
-        this.checkReload();
     }
 
     rotate() {
@@ -174,13 +158,6 @@ export class Player extends Character {
         Object.values(this.guns).forEach(g => g.instance?.reload());
     }
 
-    reload(gun) {
-        Object.values(this.guns).forEach(g => {
-            if (g.instance === gun && g.reloadCircle)
-                g.reloadCircle.style.visibility = 'visible';
-        });
-    }
-
     finishReload(gun) {
         Object.values(this.guns).forEach(g => {
             if (g.instance === gun && g.reloadCircle)
@@ -258,15 +235,6 @@ export class Player extends Character {
 
         document.addEventListener('mouseup', ev => {
             this.pressedMouse[ev.button.toString()] = false;
-        });
-    }
-
-    checkReload() {
-        Object.values(this.guns).forEach(g => {
-            if (g.instance?.reloading)
-                g.reloadCircle?.setAttribute('stroke-dasharray', `
-                    ${(g.instance.c_reload / g.instance.reloadTime) * g.maxReload} ${g.maxReload}
-                `);
         });
     }
 

@@ -9,6 +9,7 @@ export class Gun extends Entity {
 
     constructor({
         owner,
+        is_primary = true,
         damage = Constants.GUN_DMG,
         fireRate = Constants.FIRE_RATE,
         force = Constants.FIRE_FORCE,
@@ -23,6 +24,7 @@ export class Gun extends Entity {
     }) {
         super({ sprite: null });
         this.owner = owner;
+        this.is_primary = is_primary;
 
         this._damage = new Stat(damage);
         this._fireRate = new Stat(fireRate);
@@ -46,6 +48,16 @@ export class Gun extends Entity {
 
         this.projectile = null;
         this.changeProjectile(Shot);
+
+        if (is_primary) {
+            this.radius = Constants.RELOAD_SIZE - Constants.RELOAD_WIDTH - .5;
+            this.draw = this.drawPrimary;
+        } else {
+            this.radius = Constants.RELOAD_SIZE;
+            this.draw = this.drawSecondary;
+        }
+
+        this.lineWidth = Constants.RELOAD_WIDTH;
 
         Game.addEntity(this);
     }
@@ -80,6 +92,54 @@ export class Gun extends Entity {
             this.shootBurst();
     }
 
+    drawPrimary(context) {
+        if (!this.reloading)
+            return;
+
+        this.x = this.owner.x + this.owner.size / 2;
+        this.y = this.owner.y - this.owner.size / 2;
+
+        context.save();
+        context.fillStyle = "white";
+        context.beginPath();
+        context.moveTo(this.x, this.y);
+        context.arc(
+            this.x,
+            this.y,
+            this.radius,
+            -Math.PI / 2,
+            -Math.PI / 2 + (Math.PI * 2) * this.c_reload,
+            false
+        );
+        context.fill();
+
+        context.restore();
+    }
+
+    drawSecondary(context) {
+        if (!this.reloading)
+            return;
+
+        this.x = this.owner.x + this.owner.size / 2;
+        this.y = this.owner.y - this.owner.size / 2;
+
+        context.save();
+        context.strokeStyle = "white";
+        context.lineWidth = this.lineWidth;
+        context.beginPath();
+        context.arc(
+            this.x,
+            this.y,
+            this.radius,
+            -Math.PI / 2,
+            -Math.PI / 2 + (Math.PI * 2) * this.c_reload,
+            false
+        );
+        context.stroke();
+
+        context.restore();
+    }
+
     shoot(direction) {
         if (this.reloading || this.c_shotTime < this.shotTime)
             return;
@@ -87,7 +147,7 @@ export class Gun extends Entity {
         this.direction = direction;
         this.c_ammo--;
         this.c_shotTime = 0;
-        
+
         this.c_burst = this.burst;
     }
 
