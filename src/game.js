@@ -81,8 +81,8 @@ export class Game {
             for (let j = i + 1; j < Game.entities.length; j++) {
                 let e2 = Game.entities[j];
 
-                const dx = e1.x + e1.hitbox - (e2.x + e2.hitbox);
-                const dy = e1.y + e1.hitbox - (e2.y + e2.hitbox);
+                const dx = e1.x + e1.hitbox/2 - (e2.x + e2.hitbox/2);
+                const dy = e1.y + e1.hitbox/2 - (e2.y + e2.hitbox/2);
                 const distance = Math.hypot(dx, dy);
                 
                 if (distance < e1.hitbox + e2.hitbox) {
