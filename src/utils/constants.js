@@ -10,17 +10,6 @@ export const LIFE = 10;
 export const MASS = 10;
 
 // Player
-export const KEY_UP = 'KeyW';
-export const KEY_DOWN = 'KeyS';
-export const KEY_LEFT = 'KeyA';
-export const KEY_RIGHT = 'KeyD';
-
-export const KEY_RELOAD = 'KeyR';
-export const KEY_DASH = 'Shift';
-export const KEY_LEFT_UTIL = 'Q';
-export const KEY_RIGHT_UTIL = 'E';
-export const KEY_SPECIAL = 'Space';
-
 export const PLAYER_HITBOX = .5 / 2;
 
 export const PLAYER_ACCELERATION = 32;
@@ -50,7 +39,7 @@ export const MAX_RATE = 8;
 export const MIN_SPREAD = 15 * (Math.PI / 180);
 export const MAX_BURST = 3;
 
-export const RELOAD_SIZE = 6;
+export const RELOAD_SIZE = 4;
 export const RELOAD_WIDTH = 2;
 
 // Projectile

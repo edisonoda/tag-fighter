@@ -9,7 +9,6 @@ export class Gun extends Entity {
 
     constructor({
         owner,
-        is_primary = true,
         damage = Constants.GUN_DMG,
         fireRate = Constants.FIRE_RATE,
         force = Constants.FIRE_FORCE,
@@ -24,7 +23,6 @@ export class Gun extends Entity {
     }) {
         super({ sprite: null });
         this.owner = owner;
-        this.is_primary = is_primary;
 
         this._damage = new Stat(damage);
         this._fireRate = new Stat(fireRate);
@@ -49,14 +47,7 @@ export class Gun extends Entity {
         this.projectile = null;
         this.changeProjectile(Shot);
 
-        if (is_primary) {
-            this.radius = Constants.RELOAD_SIZE - Constants.RELOAD_WIDTH - .5;
-            this.draw = this.drawPrimary;
-        } else {
-            this.radius = Constants.RELOAD_SIZE;
-            this.draw = this.drawSecondary;
-        }
-
+        this.radius = Constants.RELOAD_SIZE;
         this.lineWidth = Constants.RELOAD_WIDTH;
 
         Game.addEntity(this);
@@ -92,31 +83,7 @@ export class Gun extends Entity {
             this.shootBurst();
     }
 
-    drawPrimary(context) {
-        if (!this.reloading)
-            return;
-
-        this.x = this.owner.x + this.owner.size / 2;
-        this.y = this.owner.y - this.owner.size / 2;
-
-        context.save();
-        context.fillStyle = "white";
-        context.beginPath();
-        context.moveTo(this.x, this.y);
-        context.arc(
-            this.x,
-            this.y,
-            this.radius,
-            -Math.PI / 2,
-            -Math.PI / 2 + (Math.PI * 2) * this.c_reload,
-            false
-        );
-        context.fill();
-
-        context.restore();
-    }
-
-    drawSecondary(context) {
+    draw(context) {
         if (!this.reloading)
             return;
 
@@ -169,6 +136,8 @@ export class Gun extends Entity {
         if (this.c_ammo <= 0 && this.c_burst <= 0)
             this.reload();
     }
+
+    secondary(direction) { }
 
     reload() {
         if (this.c_ammo == this.ammo)

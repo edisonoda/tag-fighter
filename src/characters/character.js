@@ -52,9 +52,10 @@ export class Character extends Entity {
 
         this.shootOffset = shootOffset;
         this.guns = {
-            primary: { class: Gun, instance: null },
-            secondary: { class: null, instance: null }
+            one: { class: Gun, instance: null },
+            two: { class: null, instance: null }
         };
+        this.activeGun = 'one';
 
         this.blinkEffect = new Blinking({ target: this, duration: blinkingDuration });
         this.effects.push(this.blinkEffect);
@@ -123,21 +124,24 @@ export class Character extends Entity {
     rightUtil() { }
     special() { }
 
-    changePrimary(gunClass) {
-        this.guns.primary = {
-            ...this.guns.primary,
+    changeGun(gun, gunClass) {
+        this.guns[gun] = {
+            ...this.guns[gun],
             class: gunClass,
-            instance: new gunClass({ owner: this, is_primary: true })
+            instance: new gunClass({ owner: this })
         };
-        this.changeCrosshair(gunClass.crosshair);
+
+        if (gun == this.activeGun)
+            this.changeCrosshair(gunClass.crosshair);
     }
 
-    changeSecondary(gunClass) {
-        this.guns.secondary = {
-            ...this.guns.secondary,
-            class: gunClass,
-            instance: new gunClass({ owner: this, is_primary: false })
-        };
+    swapGun(gun = null) {
+        if (gun)
+            this.activeGun = gun;
+        else
+            this.activeGun = this.activeGun == 'one' ? 'two' : 'one';
+
+        this.changeCrosshair(this.guns[this.activeGun].class.crosshair);
     }
 
     pushBack(entity, force) {

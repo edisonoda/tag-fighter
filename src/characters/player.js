@@ -2,6 +2,7 @@ import { Character } from './character.js';
 import { Gun } from '../guns/gun.js';
 import { Game } from '../game.js';
 import { EventManager } from '../events/event_manager.js';
+import { Controls } from '../utils/controls.js';
 import * as Constants from '../utils/constants.js';
 import * as Events from '../events/events.js';
 
@@ -25,17 +26,6 @@ export class Player extends Character {
         this.mouseX = 0;
         this.mouseY = 0;
 
-        this.upKey = Constants.KEY_UP;
-        this.downKey = Constants.KEY_DOWN;
-        this.leftKey = Constants.KEY_LEFT;
-        this.rightKey = Constants.KEY_RIGHT;
-
-        this.reloadKey = Constants.KEY_RELOAD;
-        this.dashKey = Constants.KEY_DASH;
-        this.leftUtilKey = Constants.KEY_LEFT_UTIL;
-        this.rightUtilKey = Constants.KEY_RIGHT_UTIL;
-        this.specialKey = Constants.KEY_SPECIAL;
-
         this.pressedKeys = {};
         this.pressedMouse = {};
 
@@ -45,8 +35,8 @@ export class Player extends Character {
         );
         this.damaged = false;
 
-        this.changePrimary(Gun);
-        this.changeSecondary(Gun);
+        this.changeGun('one', Gun);
+        this.changeGun('two', Gun);
         this.setupControls();
         this.id = 'player';
     }
@@ -60,20 +50,29 @@ export class Player extends Character {
         if (this.pressedMouse['2'])
             this.secondary();
 
-        if (this.pressedKeys[this.reloadKey])
+        if (this.pressedKeys[Controls.RELOAD])
             this.reloadAll();
 
-        if (this.pressedKeys[this.dashKey])
+        if (this.pressedKeys[Controls.DASH])
             this.dash();
 
-        if (this.pressedKeys[this.leftUtilKey])
+        if (this.pressedKeys[Controls.LEFT_UTIL])
             this.leftUtil();
 
-        if (this.pressedKeys[this.rightUtilKey])
+        if (this.pressedKeys[Controls.RIGHT_UTIL])
             this.rightUtil();
 
-        if (this.pressedKeys[this.specialKey])
+        if (this.pressedKeys[Controls.SPECIAL])
             this.special();
+
+        if (this.pressedKeys[Controls.SWAP_GUN])
+            this.swapGun();
+
+        if (this.pressedKeys[Controls.SWAP_GUN_1])
+            this.swapGun('one');
+
+        if (this.pressedKeys[Controls.SWAP_GUN_2])
+            this.swapGun('two');
         
         if (!this.blinkEffect.active)
             this.damaged = false;
@@ -89,10 +88,10 @@ export class Player extends Character {
     move(dt) {
         let dx = 0, dy = 0;
 
-        if (this.pressedKeys[this.upKey])       dy -= 1;
-        if (this.pressedKeys[this.downKey])     dy += 1;
-        if (this.pressedKeys[this.leftKey])     dx -= 1;
-        if (this.pressedKeys[this.rightKey])    dx += 1;
+        if (this.pressedKeys[Controls.UP])       dy -= 1;
+        if (this.pressedKeys[Controls.DOWN])     dy += 1;
+        if (this.pressedKeys[Controls.LEFT])     dx -= 1;
+        if (this.pressedKeys[Controls.RIGHT])    dx += 1;
 
         if (dx !== 0 || dy !== 0) {
             let direction = Math.hypot(dx, dy);
@@ -167,28 +166,27 @@ export class Player extends Character {
         this.eventManager.notify(Events.RELOADED, { gun });
     }
 
-    primary() {
-        if (!this.guns.primary.instance)
-            return;
+    getShotDirection() {
+        let dx = this.mouseX - this.x;
+        let dy = this.mouseY - this.y;
 
-        this.shoot(this.guns.primary.instance);
+        return this.angleOffset + Math.atan2(dy, dx);
+    }
+
+    primary() {
+        let gun = this.guns[this.activeGun].instance;
+        if (!gun) return;
+
+        gun.shoot(this.getShotDirection());
         this.eventManager.notify(Events.PRIMARY);
     }
 
     secondary() {
-        if (!this.guns.secondary.instance)
-            return;
-        
-        this.shoot(this.guns.secondary.instance);
+        let gun = this.guns[this.activeGun].instance;
+        if (!gun) return;
+
+        gun.secondary(this.getShotDirection());
         this.eventManager.notify(Events.SECONDARY);
-    }
-
-    shoot(gun) {
-        let dx = this.mouseX - this.x;
-        let dy = this.mouseY - this.y;
-
-        let direction = this.angleOffset + Math.atan2(dy, dx);
-        gun.shoot(direction);
     }
 
     dash() {
@@ -235,6 +233,10 @@ export class Player extends Character {
 
         document.addEventListener('mouseup', ev => {
             this.pressedMouse[ev.button.toString()] = false;
+        });
+
+        document.addEventListener('wheel', ev => {
+            this.swapGun();
         });
     }
 
